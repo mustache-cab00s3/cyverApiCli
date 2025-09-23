@@ -1,0 +1,5235 @@
+{
+  "AddressDto": {
+    "type": "object",
+    "properties": {
+      "street": {
+        "type": "string",
+        "nullable": true
+      },
+      "postalCode": {
+        "type": "string",
+        "nullable": true
+      },
+      "city": {
+        "type": "string",
+        "nullable": true
+      },
+      "country": {
+        "type": "string",
+        "nullable": true
+      },
+      "stateOrProvince": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "AjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ApiRolesEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Client_View_Only\n\n1 = Client_Finding_Only\n\n2 = Client_Project_Only\n\n3 = Client\n\n4 = Pentester_View_Only\n\n5 = Pentester_Project_Only\n\n6 = Pentester_General\n\n7 = Pentester_ProjectManager\n\n8 = Pentester_Manager\n\n9 = Pentester_Owner",
+    "format": "int32",
+    "x-enumNames": [
+      "Client_View_Only",
+      "Client_Finding_Only",
+      "Client_Project_Only",
+      "Client",
+      "Pentester_View_Only",
+      "Pentester_Project_Only",
+      "Pentester_General",
+      "Pentester_ProjectManager",
+      "Pentester_Manager",
+      "Pentester_Owner"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "AssetDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "domain": {
+        "type": "string",
+        "nullable": true
+      },
+      "ip": {
+        "type": "string",
+        "nullable": true
+      },
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "url": {
+        "type": "string",
+        "nullable": true
+      },
+      "port": {
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "ssid": {
+        "type": "string",
+        "nullable": true
+      },
+      "path": {
+        "type": "string",
+        "nullable": true
+      },
+      "protocol": {
+        "type": "string",
+        "nullable": true
+      },
+      "location": {
+        "type": "string",
+        "nullable": true
+      },
+      "os": {
+        "type": "string",
+        "nullable": true
+      },
+      "vendor": {
+        "type": "string",
+        "nullable": true
+      },
+      "product": {
+        "type": "string",
+        "nullable": true
+      },
+      "version": {
+        "type": "string",
+        "nullable": true
+      },
+      "commit": {
+        "type": "string",
+        "nullable": true
+      },
+      "linesOfCode": {
+        "type": "string",
+        "nullable": true
+      },
+      "repository": {
+        "type": "string",
+        "nullable": true
+      },
+      "technology": {
+        "type": "string",
+        "nullable": true
+      },
+      "domainAD": {
+        "type": "string",
+        "nullable": true
+      },
+      "publicFacing": {
+        "$ref": "#/components/schemas/AssetPublicFacingEnum"
+      },
+      "typeHardware": {
+        "$ref": "#/components/schemas/AssetTypeHardwareEnum"
+      },
+      "type": {
+        "$ref": "#/components/schemas/AssetTypeEnum"
+      },
+      "hostingType": {
+        "$ref": "#/components/schemas/AssetHostingTypeEnum"
+      },
+      "environment": {
+        "$ref": "#/components/schemas/AssetEnvironmentEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "AssetDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AssetDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "AssetDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/AssetDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "AssetEnvironmentEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Unknown\n\n1 = Development\n\n2 = Test\n\n3 = Production",
+    "format": "int32",
+    "x-enumNames": [
+      "Unknown",
+      "Development",
+      "Test",
+      "Production"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "AssetHostingTypeEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "type": "integer",
+    "description": "\n\n1 = PublicCloud_Azure\n\n2 = PublicCloud_AWS\n\n3 = PublicCloud_GoogleCloud\n\n4 = PublicCloud_Other\n\n5 = OnPremiseInfrastructure\n\n6 = PrivateCloud\n\n7 = Other",
+    "format": "int32",
+    "x-enumNames": [
+      "PublicCloud_Azure",
+      "PublicCloud_AWS",
+      "PublicCloud_GoogleCloud",
+      "PublicCloud_Other",
+      "OnPremiseInfrastructure",
+      "PrivateCloud",
+      "Other"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "AssetMatchOptionEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = CreateAssetAndMatch\n\n1 = OnlyTakeFindingsThatMatchWithClientAssets",
+    "format": "int32",
+    "x-enumNames": [
+      "CreateAssetAndMatch",
+      "OnlyTakeFindingsThatMatchWithClientAssets"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "AssetPublicFacingEnum": {
+    "enum": [
+      0,
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Unknown\n\n1 = Internal\n\n2 = External",
+    "format": "int32",
+    "x-enumNames": [
+      "Unknown",
+      "Internal",
+      "External"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "AssetTypeEnum": {
+    "enum": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "type": "integer",
+    "description": "\n\n2 = WebApplication\n\n3 = MobileApplication\n\n4 = API\n\n5 = Network\n\n6 = WifiNetwork\n\n7 = ActiveDirectory\n\n8 = PhysicalAsset\n\n9 = HardwareDevice\n\n10 = SmartContract\n\n11 = SourceCode\n\n12 = User\n\n13 = Other",
+    "format": "int32",
+    "x-enumNames": [
+      "WebApplication",
+      "MobileApplication",
+      "API",
+      "Network",
+      "WifiNetwork",
+      "ActiveDirectory",
+      "PhysicalAsset",
+      "HardwareDevice",
+      "SmartContract",
+      "SourceCode",
+      "User",
+      "Other"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "AssetTypeHardwareEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Other\n\n1 = Workstation\n\n2 = Desktop\n\n3 = Laptop\n\n4 = Printer\n\n5 = IotDevice\n\n6 = Cloud",
+    "format": "int32",
+    "x-enumNames": [
+      "Other",
+      "Workstation",
+      "Desktop",
+      "Laptop",
+      "Printer",
+      "IotDevice",
+      "Cloud"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "AuthenticateModel": {
+    "required": [
+      "password",
+      "userNameOrEmailAddress"
+    ],
+    "type": "object",
+    "properties": {
+      "userNameOrEmailAddress": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "password": {
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string"
+      },
+      "twoFactorVerificationCode": {
+        "type": "string",
+        "nullable": true
+      },
+      "rememberClient": {
+        "type": "boolean"
+      },
+      "twoFactorRememberClientToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "singleSignIn": {
+        "type": "boolean",
+        "nullable": true
+      },
+      "returnUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "captchaResponse": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "AuthenticateResultModel": {
+    "type": "object",
+    "properties": {
+      "accessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "encryptedAccessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "expireInSeconds": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "shouldResetPassword": {
+        "type": "boolean"
+      },
+      "passwordResetCode": {
+        "type": "string",
+        "nullable": true
+      },
+      "userId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "requiresTwoFactorVerification": {
+        "type": "boolean"
+      },
+      "twoFactorAuthProviders": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "twoFactorRememberClientToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "returnUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "refreshToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "refreshTokenExpireInSeconds": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "AuthenticateResultModelAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/AuthenticateResultModel"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ChecklistStatusEnum": {
+    "enum": [
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Draft\n\n2 = Published",
+    "format": "int32",
+    "x-enumNames": [
+      "Draft",
+      "Published"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ChecklistTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "status": {
+        "$ref": "#/components/schemas/ChecklistStatusEnum"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "externalUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "taskGroupList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TaskGroupTemplateDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ChecklistTemplateDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ChecklistTemplateDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ChecklistTemplateDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ChecklistTemplateDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ClientAssignmentDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "startEnum": {
+        "$ref": "#/components/schemas/ProjectStartEnum"
+      },
+      "frequency": {
+        "$ref": "#/components/schemas/ProjectFrequencyEnum"
+      },
+      "objectives": {
+        "$ref": "#/components/schemas/ProjectObjectivesEnum"
+      },
+      "typeOfTesting": {
+        "$ref": "#/components/schemas/ProjectTypeOfTestingEnum"
+      },
+      "clientTypeOfTesting": {
+        "$ref": "#/components/schemas/ClientProjectTypeOfTestingEnum"
+      },
+      "requestedDate": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "details": {
+        "type": "string",
+        "nullable": true
+      },
+      "howToAccessAssets": {
+        "type": "string",
+        "nullable": true
+      },
+      "credentials": {
+        "type": "string",
+        "nullable": true
+      },
+      "dropDown1": {
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "dropDown2": {
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "dropDown3": {
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "dropDown4": {
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "dropDown5": {
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "text1": {
+        "type": "string",
+        "nullable": true
+      },
+      "text2": {
+        "type": "string",
+        "nullable": true
+      },
+      "text3": {
+        "type": "string",
+        "nullable": true
+      },
+      "text4": {
+        "type": "string",
+        "nullable": true
+      },
+      "text5": {
+        "type": "string",
+        "nullable": true
+      },
+      "multitext1": {
+        "type": "string",
+        "nullable": true
+      },
+      "multitext2": {
+        "type": "string",
+        "nullable": true
+      },
+      "multitext3": {
+        "type": "string",
+        "nullable": true
+      },
+      "multitext4": {
+        "type": "string",
+        "nullable": true
+      },
+      "multitext5": {
+        "type": "string",
+        "nullable": true
+      },
+      "multiselect1": {
+        "type": "string",
+        "nullable": true
+      },
+      "multiselect2": {
+        "type": "string",
+        "nullable": true
+      },
+      "multiselect3": {
+        "type": "string",
+        "nullable": true
+      },
+      "multiselect4": {
+        "type": "string",
+        "nullable": true
+      },
+      "multiselect5": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ClientDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "clientNumber": {
+        "type": "string",
+        "nullable": true
+      },
+      "teamsAssigned": {
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "$ref": "#/components/schemas/ClientStatusEnum"
+      },
+      "clientInformation": {
+        "$ref": "#/components/schemas/ClientInformationDto"
+      },
+      "assetIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "projectIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "labelList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LabelDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ClientDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ClientDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ClientDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ClientDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ClientDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ClientDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ClientInformationDto": {
+    "type": "object",
+    "properties": {
+      "companyName": {
+        "type": "string",
+        "nullable": true
+      },
+      "website": {
+        "type": "string",
+        "nullable": true
+      },
+      "address": {
+        "$ref": "#/components/schemas/AddressDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ClientProjectTypeOfTestingEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "type": "integer",
+    "description": "\n\n1 = WebApp\n\n2 = WebService\n\n3 = MobileApp\n\n4 = InternalInfrastructure\n\n5 = ExternalInfrastructure\n\n6 = WirelessInfrastructure",
+    "format": "int32",
+    "x-enumNames": [
+      "WebApp",
+      "WebService",
+      "MobileApp",
+      "InternalInfrastructure",
+      "ExternalInfrastructure",
+      "WirelessInfrastructure"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ClientRequestFormFieldTypeEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Text\n\n2 = Multitext\n\n3 = Dropdown\n\n4 = Multiselect\n\n5 = DateTime",
+    "format": "int32",
+    "x-enumNames": [
+      "Text",
+      "Multitext",
+      "Dropdown",
+      "Multiselect",
+      "DateTime"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ClientStatusEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Active\n\n1 = Inactive\n\n2 = New\n\n3 = SignUp",
+    "format": "int32",
+    "x-enumNames": [
+      "Active",
+      "Inactive",
+      "New",
+      "SignUp"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ComplianceNormStatusEnum": {
+    "enum": [
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Draft\n\n2 = Published",
+    "format": "int32",
+    "x-enumNames": [
+      "Draft",
+      "Published"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ComplianceNormTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "status": {
+        "$ref": "#/components/schemas/ComplianceNormStatusEnum"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "controlGroupList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ControlGroupTemplateDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ComplianceNormTemplateDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ComplianceNormTemplateDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ComplianceNormTemplateDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ComplianceNormTemplateDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ContinuousProjectCloseFindingOptionEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = NoFindingMatch\n\n1 = NoFindingMatchAndAssets",
+    "format": "int32",
+    "x-enumNames": [
+      "NoFindingMatch",
+      "NoFindingMatchAndAssets"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ContinuousProjectDatesDto": {
+    "type": "object",
+    "properties": {
+      "startDate": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "endDate": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "creationTime": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "reportDueDate": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "reportPublishedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ContinuousProjectDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "methodologyMarkdown": {
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "$ref": "#/components/schemas/ContinuousProjectStatusEnum"
+      },
+      "cvssVersion": {
+        "$ref": "#/components/schemas/ProjectTemplateCvssVersion"
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "clientName": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectTemplateTitle": {
+        "type": "string",
+        "nullable": true
+      },
+      "reportTemplateId": {
+        "type": "string",
+        "format": "uuid",
+        "readOnly": true
+      },
+      "reportTemplateTitle": {
+        "type": "string",
+        "nullable": true,
+        "readOnly": true
+      },
+      "quoteTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "quoteTemplateTitle": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectLeadId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectLeadName": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectReviewerId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectReviewerName": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectDates": {
+        "$ref": "#/components/schemas/ContinuousProjectDatesDto"
+      },
+      "clientAssignment": {
+        "$ref": "#/components/schemas/ClientAssignmentDto"
+      },
+      "settings": {
+        "$ref": "#/components/schemas/ContinuousProjectSettingsDto"
+      },
+      "labelList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LabelDto"
+        },
+        "nullable": true
+      },
+      "findingIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "assetIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "runIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "reportTemplates": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectReportTemplateDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ContinuousProjectDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ContinuousProjectDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ContinuousProjectDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ContinuousProjectDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ContinuousProjectDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ContinuousProjectDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ContinuousProjectFindingMatchingOption": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = TitleAndSeverity\n\n1 = TitleSeverityAndAssets",
+    "format": "int32",
+    "x-enumNames": [
+      "TitleAndSeverity",
+      "TitleSeverityAndAssets"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ContinuousProjectSettingsDto": {
+    "type": "object",
+    "properties": {
+      "generateReportOnRunFinish": {
+        "type": "boolean"
+      },
+      "generatePdfAndPublish": {
+        "type": "boolean"
+      },
+      "aggregateOption": {
+        "$ref": "#/components/schemas/EvidenceOptionEnum"
+      },
+      "scanner": {
+        "$ref": "#/components/schemas/ContinuousProjectVulnerabilityTypeEnum"
+      },
+      "defaultFindingStatus": {
+        "$ref": "#/components/schemas/FindingStatusEnum"
+      },
+      "isWeeklyScanEnabled": {
+        "type": "boolean"
+      },
+      "weeklyScanDay": {
+        "$ref": "#/components/schemas/DayOfWeek"
+      },
+      "weeklyScanTime": {
+        "type": "string",
+        "example": "00:00:00"
+      },
+      "findingMergeOption": {
+        "$ref": "#/components/schemas/FindingMergeOptionEnum"
+      },
+      "useCase": {
+        "$ref": "#/components/schemas/ContinuousProjectUseCaseEnum"
+      },
+      "closeFindingOption": {
+        "$ref": "#/components/schemas/ContinuousProjectCloseFindingOptionEnum"
+      },
+      "findingMatchingOption": {
+        "$ref": "#/components/schemas/ContinuousProjectFindingMatchingOption"
+      },
+      "targetField": {
+        "$ref": "#/components/schemas/TargetFieldEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ContinuousProjectStatusEnum": {
+    "enum": [
+      0,
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Active\n\n1 = Stopped\n\n2 = Requested",
+    "format": "int32",
+    "x-enumNames": [
+      "Active",
+      "Stopped",
+      "Requested"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "ContinuousProjectUseCaseEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = RunBased\n\n1 = RealTime",
+    "format": "int32",
+    "x-enumNames": [
+      "RunBased",
+      "RealTime"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ContinuousProjectVulnerabilityTypeEnum": {
+    "enum": [
+      0,
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n0 = None\n\n1 = ReNgine\n\n2 = Tenable",
+    "format": "int32",
+    "x-enumNames": [
+      "None",
+      "ReNgine",
+      "Tenable"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "ControlGroupTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "controlList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ControlTemplateDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ControlTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreatClientUserRequest": {
+    "required": [
+      "emailAddress",
+      "name",
+      "surname"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "maxLength": 64,
+        "minLength": 0,
+        "type": "string"
+      },
+      "surname": {
+        "maxLength": 64,
+        "minLength": 0,
+        "type": "string"
+      },
+      "emailAddress": {
+        "maxLength": 256,
+        "minLength": 0,
+        "type": "string",
+        "format": "email"
+      },
+      "phoneNumber": {
+        "maxLength": 32,
+        "minLength": 0,
+        "type": "string",
+        "nullable": true
+      },
+      "isActive": {
+        "type": "boolean"
+      },
+      "isTwoFactorEnabled": {
+        "type": "boolean"
+      },
+      "isLockoutEnabled": {
+        "type": "boolean"
+      },
+      "role": {
+        "$ref": "#/components/schemas/ApiRolesEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreateClientRequest": {
+    "required": [
+      "name",
+      "status"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "maxLength": 100,
+        "minLength": 1,
+        "type": "string"
+      },
+      "clientNumber": {
+        "maxLength": 20,
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "$ref": "#/components/schemas/ClientStatusEnum"
+      },
+      "accountManagerId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "labelIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "teamIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "clientInformation": {
+        "$ref": "#/components/schemas/ClientInformationDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreateContinuousProjectRequest": {
+    "required": [
+      "clientId",
+      "name",
+      "projectTemplateId",
+      "status"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "maxLength": 250,
+        "minLength": 1,
+        "type": "string"
+      },
+      "code": {
+        "maxLength": 100,
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "$ref": "#/components/schemas/ContinuousProjectStatusEnum"
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "labelIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreateOrUpdateAssetRequest": {
+    "required": [
+      "title",
+      "type"
+    ],
+    "type": "object",
+    "properties": {
+      "title": {
+        "maxLength": 500,
+        "minLength": 1,
+        "type": "string"
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "domain": {
+        "type": "string",
+        "nullable": true
+      },
+      "ip": {
+        "type": "string",
+        "nullable": true
+      },
+      "url": {
+        "type": "string",
+        "nullable": true
+      },
+      "port": {
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "ssid": {
+        "type": "string",
+        "nullable": true
+      },
+      "path": {
+        "type": "string",
+        "nullable": true
+      },
+      "protocol": {
+        "type": "string",
+        "nullable": true
+      },
+      "location": {
+        "type": "string",
+        "nullable": true
+      },
+      "operatingSystem": {
+        "type": "string",
+        "nullable": true
+      },
+      "vendor": {
+        "type": "string",
+        "nullable": true
+      },
+      "product": {
+        "type": "string",
+        "nullable": true
+      },
+      "version": {
+        "type": "string",
+        "nullable": true
+      },
+      "commit": {
+        "type": "string",
+        "nullable": true
+      },
+      "linesOfCode": {
+        "type": "string",
+        "nullable": true
+      },
+      "repository": {
+        "type": "string",
+        "nullable": true
+      },
+      "technology": {
+        "type": "string",
+        "nullable": true
+      },
+      "domainAD": {
+        "type": "string",
+        "nullable": true
+      },
+      "testingFrequency": {
+        "maximum": 24,
+        "minimum": 1,
+        "type": "integer",
+        "format": "int32",
+        "nullable": true
+      },
+      "publicFacing": {
+        "$ref": "#/components/schemas/AssetPublicFacingEnum"
+      },
+      "typeHardware": {
+        "$ref": "#/components/schemas/AssetTypeHardwareEnum"
+      },
+      "type": {
+        "$ref": "#/components/schemas/AssetTypeEnum"
+      },
+      "hostingType": {
+        "$ref": "#/components/schemas/AssetHostingTypeEnum"
+      },
+      "environment": {
+        "$ref": "#/components/schemas/AssetEnvironmentEnum"
+      },
+      "labelIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreateOrUpdateFindingRequest": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "maxLength": 100,
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "maxLength": 250,
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "maxLength": 10000,
+        "type": "string",
+        "nullable": true
+      },
+      "type": {
+        "$ref": "#/components/schemas/FindingTypeEnum"
+      },
+      "status": {
+        "$ref": "#/components/schemas/FindingStatusEnum"
+      },
+      "severity": {
+        "$ref": "#/components/schemas/FindingCriticalityEnum"
+      },
+      "complianceStatus": {
+        "$ref": "#/components/schemas/FindingPciComplianceEnum"
+      },
+      "complianceComment": {
+        "type": "string",
+        "nullable": true
+      },
+      "impact": {
+        "maximum": 5,
+        "minimum": 0,
+        "type": "integer",
+        "format": "int32"
+      },
+      "impactDescription": {
+        "type": "string",
+        "nullable": true
+      },
+      "likelihood": {
+        "maximum": 5,
+        "minimum": 0,
+        "type": "integer",
+        "format": "int32"
+      },
+      "likelihoodDescription": {
+        "type": "string",
+        "nullable": true
+      },
+      "recommendation": {
+        "type": "string",
+        "nullable": true
+      },
+      "backgroundInformation": {
+        "type": "string",
+        "nullable": true
+      },
+      "cvss": {
+        "$ref": "#/components/schemas/FindingCvssDto"
+      },
+      "projectTaskId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "reviewerId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "cweList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "cveList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "mitreAttackTacticsList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "mitreAttackTechniquesList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "mitreAttackMitigationsList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "vulnerabilityTypeList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "externalUrlList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ExternalUrlDto"
+        },
+        "nullable": true
+      },
+      "assetIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "labelIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "projectControlIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "findingEvidenceList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FindingEvidenceDto"
+        },
+        "nullable": true
+      },
+      "customFields": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/CustomFindingFieldAPIDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreateOrUpdateTeamRequest": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "teamLeaderId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "userIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreateProjectRequestV2": {
+    "required": [
+      "clientId",
+      "name",
+      "projectTemplateId",
+      "status"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "maxLength": 250,
+        "minLength": 1,
+        "type": "string"
+      },
+      "code": {
+        "maxLength": 100,
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "labelIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "CreateUserRequest": {
+    "required": [
+      "emailAddress",
+      "name",
+      "surname"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "maxLength": 64,
+        "minLength": 0,
+        "type": "string"
+      },
+      "surname": {
+        "maxLength": 64,
+        "minLength": 0,
+        "type": "string"
+      },
+      "emailAddress": {
+        "maxLength": 256,
+        "minLength": 0,
+        "type": "string",
+        "format": "email"
+      },
+      "phoneNumber": {
+        "maxLength": 32,
+        "minLength": 0,
+        "type": "string",
+        "nullable": true
+      },
+      "isActive": {
+        "type": "boolean"
+      },
+      "isTwoFactorEnabled": {
+        "type": "boolean"
+      },
+      "isLockoutEnabled": {
+        "type": "boolean"
+      },
+      "role": {
+        "$ref": "#/components/schemas/ApiRolesEnum"
+      },
+      "clientGuid": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "CustomFindingFieldAPIDto": {
+    "type": "object",
+    "properties": {
+      "field": {
+        "type": "string",
+        "nullable": true
+      },
+      "fieldType": {
+        "$ref": "#/components/schemas/FormFieldTypeEnum"
+      },
+      "value": {
+        "type": "string",
+        "nullable": true
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "DayOfWeek": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Sunday\n\n1 = Monday\n\n2 = Tuesday\n\n3 = Wednesday\n\n4 = Thursday\n\n5 = Friday\n\n6 = Saturday",
+    "format": "int32",
+    "x-enumNames": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ErrorInfo": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "message": {
+        "type": "string",
+        "nullable": true
+      },
+      "details": {
+        "type": "string",
+        "nullable": true
+      },
+      "validationErrors": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ValidationErrorInfo"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "EvidenceOptionEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Aggregate\n\n1 = DontAggregate",
+    "format": "int32",
+    "x-enumNames": [
+      "Aggregate",
+      "DontAggregate"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ExternalAuthenticateModel": {
+    "required": [
+      "authProvider",
+      "providerAccessCode",
+      "providerKey"
+    ],
+    "type": "object",
+    "properties": {
+      "authProvider": {
+        "maxLength": 128,
+        "minLength": 1,
+        "type": "string"
+      },
+      "providerKey": {
+        "maxLength": 256,
+        "minLength": 1,
+        "type": "string"
+      },
+      "providerAccessCode": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "returnUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "singleSignIn": {
+        "type": "boolean",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ExternalAuthenticateResultModel": {
+    "type": "object",
+    "properties": {
+      "accessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "encryptedAccessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "expireInSeconds": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "waitingForActivation": {
+        "type": "boolean"
+      },
+      "returnUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "refreshToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "refreshTokenExpireInSeconds": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ExternalLoginProviderInfoModel": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "clientId": {
+        "type": "string",
+        "nullable": true
+      },
+      "additionalParams": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string",
+          "nullable": true
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ExternalUrlDto": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "link": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "FileTypeEnum": {
+    "enum": [
+      4,
+      5,
+      6,
+      7,
+      23,
+      24,
+      25,
+      29
+    ],
+    "type": "integer",
+    "description": "\n\n4 = FindingImport\n\n5 = Report\n\n6 = Evidence\n\n7 = Other\n\n23 = QuoteFile\n\n24 = Invoice\n\n25 = Indemnity\n\n29 = BenchmarkImport",
+    "format": "int32",
+    "x-enumNames": [
+      "FindingImport",
+      "Report",
+      "Evidence",
+      "Other",
+      "QuoteFile",
+      "Invoice",
+      "Indemnity",
+      "BenchmarkImport"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "FindingCriticalityEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Info\n\n1 = Low\n\n2 = Medium\n\n3 = High\n\n4 = Critical",
+    "format": "int32",
+    "x-enumNames": [
+      "Info",
+      "Low",
+      "Medium",
+      "High",
+      "Critical"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "FindingCvssDto": {
+    "type": "object",
+    "properties": {
+      "cvss40Vector": {
+        "type": "string",
+        "nullable": true
+      },
+      "cvss40Score": {
+        "pattern": "^\\d*(\\.\\d{0,1})?$",
+        "type": "number",
+        "format": "double",
+        "nullable": true
+      },
+      "cvss31Vector": {
+        "type": "string",
+        "nullable": true
+      },
+      "cvss31Score": {
+        "pattern": "^\\d*(\\.\\d{0,1})?$",
+        "type": "number",
+        "format": "double",
+        "nullable": true
+      },
+      "cvss30Vector": {
+        "type": "string",
+        "nullable": true
+      },
+      "cvss30Score": {
+        "pattern": "^\\d*(\\.\\d{0,1})?$",
+        "type": "number",
+        "format": "double",
+        "nullable": true
+      },
+      "cvss20Vector": {
+        "type": "string",
+        "nullable": true
+      },
+      "cvss20Score": {
+        "pattern": "^\\d*(\\.\\d{0,1})?$",
+        "type": "number",
+        "format": "double",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "FindingDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "parentId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "jiraIssueKey": {
+        "type": "string",
+        "nullable": true
+      },
+      "impact": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "impactDescription": {
+        "type": "string",
+        "nullable": true
+      },
+      "likelihood": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "likelihoodDescription": {
+        "type": "string",
+        "nullable": true
+      },
+      "type": {
+        "$ref": "#/components/schemas/FindingTypeEnum"
+      },
+      "status": {
+        "$ref": "#/components/schemas/FindingStatusEnum"
+      },
+      "severity": {
+        "$ref": "#/components/schemas/FindingCriticalityEnum"
+      },
+      "occurrence": {
+        "$ref": "#/components/schemas/FindingOccurrenceEnum"
+      },
+      "runStatus": {
+        "$ref": "#/components/schemas/RunStatusEnum"
+      },
+      "complianceStatus": {
+        "$ref": "#/components/schemas/FindingPciComplianceEnum"
+      },
+      "complianceComment": {
+        "type": "string",
+        "nullable": true
+      },
+      "recommendation": {
+        "type": "string",
+        "nullable": true
+      },
+      "backgroundInformation": {
+        "type": "string",
+        "nullable": true
+      },
+      "cvss": {
+        "$ref": "#/components/schemas/FindingCvssDto"
+      },
+      "projectName": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "clientName": {
+        "type": "string",
+        "nullable": true
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "reporterName": {
+        "type": "string",
+        "nullable": true
+      },
+      "reporterId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "reviewerName": {
+        "type": "string",
+        "nullable": true
+      },
+      "reviewerId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "clientAssigneeName": {
+        "type": "string",
+        "nullable": true
+      },
+      "clientAssigneeId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "creationTime": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "visibleToClient": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "closedOn": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "reviewedOn": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "projectTask": {
+        "$ref": "#/components/schemas/ProjectTaskDto"
+      },
+      "vulnerabilityTypeList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "cweList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "cveList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "mitreAttackTacticsList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "mitreAttackTechniquesList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "mitreAttackMitigationsList": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      },
+      "assetIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "reoccurrenceIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "projectControlList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectControlDto"
+        },
+        "nullable": true
+      },
+      "labelList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LabelDto"
+        },
+        "nullable": true
+      },
+      "findingEvidenceList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FindingEvidenceDto"
+        },
+        "nullable": true
+      },
+      "runList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FindingRunDto"
+        },
+        "nullable": true
+      },
+      "externalUrlList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ExternalUrlDto"
+        },
+        "nullable": true
+      },
+      "customFields": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/CustomFindingFieldAPIDto"
+        },
+        "nullable": true
+      },
+      "externalUrlJson": {
+        "type": "string",
+        "nullable": true
+      },
+      "customFieldsJson": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "FindingDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/FindingDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "FindingDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FindingDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "FindingDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/FindingDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "FindingEvidenceDto": {
+    "required": [
+      "title"
+    ],
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "title": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "location": {
+        "type": "string",
+        "nullable": true
+      },
+      "version": {
+        "type": "string",
+        "nullable": true
+      },
+      "reproduce": {
+        "type": "string",
+        "nullable": true
+      },
+      "results": {
+        "type": "string",
+        "nullable": true
+      },
+      "issueDetails": {
+        "type": "string",
+        "nullable": true
+      },
+      "isVisibleInReport": {
+        "type": "boolean"
+      },
+      "ip": {
+        "type": "string",
+        "nullable": true
+      },
+      "hostname": {
+        "type": "string",
+        "nullable": true
+      },
+      "port": {
+        "type": "string",
+        "nullable": true
+      },
+      "protocol": {
+        "type": "string",
+        "nullable": true
+      },
+      "evidenceComplianceStatus": {
+        "$ref": "#/components/schemas/FindingPciComplianceEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "FindingMergeOptionEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Skip\n\n1 = Overwrite",
+    "format": "int32",
+    "x-enumNames": [
+      "Skip",
+      "Overwrite"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "FindingOccurrenceEnum": {
+    "enum": [
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n1 = New\n\n2 = Reoccurrence",
+    "format": "int32",
+    "x-enumNames": [
+      "New",
+      "Reoccurrence"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "FindingPciComplianceEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Pass\n\n1 = Fail",
+    "format": "int32",
+    "x-enumNames": [
+      "Pass",
+      "Fail"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "FindingRunDto": {
+    "type": "object",
+    "properties": {
+      "runId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "runNumber": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "initialFindingStatus": {
+        "$ref": "#/components/schemas/FindingStatusEnum"
+      },
+      "finalFindingStatus": {
+        "$ref": "#/components/schemas/FindingStatusEnum"
+      },
+      "finishedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "FindingStatusEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Draft\n\n2 = PendingFix\n\n3 = Fixed\n\n4 = ReadyRetest\n\n5 = Accepted\n\n6 = ToReview\n\n7 = Reviewed\n\n8 = Mitigated\n\n9 = PartialFix\n\n10 = FalsePositive\n\n11 = Raised\n\n12 = ReOpen\n\n13 = Acknowledged\n\n14 = Identified",
+    "format": "int32",
+    "x-enumNames": [
+      "Draft",
+      "PendingFix",
+      "Fixed",
+      "ReadyRetest",
+      "Accepted",
+      "ToReview",
+      "Reviewed",
+      "Mitigated",
+      "PartialFix",
+      "FalsePositive",
+      "Raised",
+      "ReOpen",
+      "Acknowledged",
+      "Identified"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "FindingTypeEnum": {
+    "enum": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Vulnerability\n\n2 = Nonconformity\n\n4 = Observation\n\n8 = Incident\n\n16 = Risk",
+    "format": "int32",
+    "x-enumNames": [
+      "Vulnerability",
+      "Nonconformity",
+      "Observation",
+      "Incident",
+      "Risk"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "FormDataDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "options": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FormDataOptionsDto"
+        },
+        "nullable": true
+      },
+      "type": {
+        "$ref": "#/components/schemas/ClientRequestFormFieldTypeEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "FormDataOptionsDto": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "FormFieldTypeEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Text\n\n2 = Multitext\n\n3 = Dropdown\n\n4 = Multiselect",
+    "format": "int32",
+    "x-enumNames": [
+      "Text",
+      "Multitext",
+      "Dropdown",
+      "Multiselect"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "GuidAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ImpersonatedAuthenticateResultModel": {
+    "type": "object",
+    "properties": {
+      "accessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "encryptedAccessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "expireInSeconds": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ImportFileTypeEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26
+    ],
+    "type": "integer",
+    "description": "\n\n0 = CyverXML\n\n1 = Burp\n\n2 = NessusCSV\n\n3 = Nmap\n\n4 = Qualys\n\n5 = Invicti\n\n6 = Nexpose\n\n7 = OpenVas\n\n8 = Zap\n\n9 = CyverCSV\n\n10 = Acunetix\n\n11 = Blindspot\n\n12 = CarbonBlack\n\n13 = Plextrac\n\n14 = QualysScan\n\n15 = Prowler\n\n16 = NessusXML\n\n17 = Scout\n\n18 = QualysScanApi\n\n19 = PurpleKnight\n\n20 = HCLAppScan\n\n21 = Snyk\n\n22 = Checkmarx\n\n23 = AppCheck\n\n24 = Nipper\n\n25 = PentestToolsNetworkScanner\n\n26 = PentestToolsWebsiteScanner",
+    "format": "int32",
+    "x-enumNames": [
+      "CyverXML",
+      "Burp",
+      "NessusCSV",
+      "Nmap",
+      "Qualys",
+      "Invicti",
+      "Nexpose",
+      "OpenVas",
+      "Zap",
+      "CyverCSV",
+      "Acunetix",
+      "Blindspot",
+      "CarbonBlack",
+      "Plextrac",
+      "QualysScan",
+      "Prowler",
+      "NessusXML",
+      "Scout",
+      "QualysScanApi",
+      "PurpleKnight",
+      "HCLAppScan",
+      "Snyk",
+      "Checkmarx",
+      "AppCheck",
+      "Nipper",
+      "PentestToolsNetworkScanner",
+      "PentestToolsWebsiteScanner"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "Int32AjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "LabelDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "text": {
+        "type": "string",
+        "nullable": true
+      },
+      "type": {
+        "$ref": "#/components/schemas/LabelTypeEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "LabelDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LabelDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "LabelDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/LabelDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "LabelTypeEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Finding\n\n1 = Client\n\n2 = Project\n\n3 = Assets\n\n4 = All",
+    "format": "int32",
+    "x-enumNames": [
+      "Finding",
+      "Client",
+      "Project",
+      "Assets",
+      "All"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "PlanningDateDtoV2": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "nullable": true
+      },
+      "startDate": {
+        "type": "string",
+        "format": "date"
+      },
+      "endDate": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectChecklistDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "externalUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "taskGroupList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectTaskGroupDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectChecklistDtoListResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectChecklistDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectChecklistDtoListResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ProjectChecklistDtoListResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectComplianceNormDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "controlGroupList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectControlGroupDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectComplianceNormDtoListResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectComplianceNormDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectComplianceNormDtoListResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ProjectComplianceNormDtoListResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectControlDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectControlGroupDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "controlList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectControlDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectDatesDtoV2": {
+    "type": "object",
+    "properties": {
+      "startDate": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "endDate": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "startTesting": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "endTesting": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "creationTime": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "reportDueDate": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "reportPublishedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "planningDates": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PlanningDateDtoV2"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectDtoV2": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "methodologyMarkdown": {
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "type": "string",
+        "nullable": true
+      },
+      "cvssVersion": {
+        "$ref": "#/components/schemas/ProjectTemplateCvssVersion"
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "clientName": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectTemplateTitle": {
+        "type": "string",
+        "nullable": true
+      },
+      "reportTemplateId": {
+        "type": "string",
+        "format": "uuid",
+        "readOnly": true
+      },
+      "reportTemplateTitle": {
+        "type": "string",
+        "nullable": true,
+        "readOnly": true
+      },
+      "quoteTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "quoteTemplateTitle": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectLeadId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectLeadName": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectReviewerId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "projectReviewerName": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectDates": {
+        "$ref": "#/components/schemas/ProjectDatesDtoV2"
+      },
+      "labelList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LabelDto"
+        },
+        "nullable": true
+      },
+      "findingIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "assetIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "checklistIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "complianceNormIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "userIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "teamIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "reportTemplates": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectReportTemplateDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectDtoV2AjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ProjectDtoV2"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectDtoV2PagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectDtoV2"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectDtoV2PagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ProjectDtoV2PagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectFrequencyEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "type": "integer",
+    "description": "\n\n1 = OnceAMonth\n\n2 = OnceAQuarter\n\n3 = TwiceAYear\n\n4 = OnceAYear\n\n5 = OneTimeOnly\n\n6 = Other\n\n7 = IDontKnowYet\n\n8 = Daily\n\n9 = Weekly\n\n10 = Monthly\n\n11 = Realtime",
+    "format": "int32",
+    "x-enumNames": [
+      "OnceAMonth",
+      "OnceAQuarter",
+      "TwiceAYear",
+      "OnceAYear",
+      "OneTimeOnly",
+      "Other",
+      "IDontKnowYet",
+      "Daily",
+      "Weekly",
+      "Monthly",
+      "Realtime"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ProjectObjectivesEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "type": "integer",
+    "description": "\n\n1 = RegulatoryCompliance\n\n2 = ProductLaunch\n\n3 = PassAVendorAssessment\n\n4 = FindVulnerabilities\n\n5 = Other",
+    "format": "int32",
+    "x-enumNames": [
+      "RegulatoryCompliance",
+      "ProductLaunch",
+      "PassAVendorAssessment",
+      "FindVulnerabilities",
+      "Other"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ProjectReportTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "reportTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectStartEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "type": "integer",
+    "description": "\n\n1 = RightAway\n\n2 = TimeIsFlexible\n\n3 = OneMonth\n\n4 = TwoMonthsOrMore",
+    "format": "int32",
+    "x-enumNames": [
+      "RightAway",
+      "TimeIsFlexible",
+      "OneMonth",
+      "TwoMonthsOrMore"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ProjectTaskDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "externalUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "$ref": "#/components/schemas/ProjectTaskStatusEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectTaskGroupDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "taskList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectTaskDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectTaskStatusEnum": {
+    "enum": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Todo\n\n2 = InProgress\n\n3 = Skipped\n\n4 = Done",
+    "format": "int32",
+    "x-enumNames": [
+      "Todo",
+      "InProgress",
+      "Skipped",
+      "Done"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ProjectTemplateCvssVersion": {
+    "enum": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Version20\n\n1 = Version30\n\n2 = Version31\n\n3 = Version40",
+    "format": "int32",
+    "x-enumNames": [
+      "Version20",
+      "Version30",
+      "Version31",
+      "Version40"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ProjectTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "reportTemplateId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true,
+        "readOnly": true
+      },
+      "findingFieldsTemplateId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "projectWorkflowTemplateId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "status": {
+        "$ref": "#/components/schemas/ProjectTemplateStatusEnum"
+      },
+      "type": {
+        "$ref": "#/components/schemas/ProjectTypeEnum"
+      },
+      "typeOfFindings": {
+        "$ref": "#/components/schemas/FindingTypeEnum"
+      },
+      "clientCanReportTypeOfFindings": {
+        "$ref": "#/components/schemas/FindingTypeEnum"
+      },
+      "cvssVersion": {
+        "$ref": "#/components/schemas/ProjectTemplateCvssVersion"
+      },
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "checklistTemplateList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ChecklistTemplateDto"
+        },
+        "nullable": true
+      },
+      "complianceNormTemplateList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ComplianceNormTemplateDto"
+        },
+        "nullable": true
+      },
+      "reportTemplates": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectTemplateReportTemplateDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectTemplateDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ProjectTemplateDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectTemplateDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ProjectTemplateDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectTemplateReportTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "projectTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "reportTemplateId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "reportTemplateTitle": {
+        "type": "string",
+        "nullable": true
+      },
+      "order": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ProjectTemplateStatusEnum": {
+    "enum": [
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Draft\n\n2 = Published",
+    "format": "int32",
+    "x-enumNames": [
+      "Draft",
+      "Published"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ProjectTypeEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Timebased\n\n1 = Continuous",
+    "format": "int32",
+    "x-enumNames": [
+      "Timebased",
+      "Continuous"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ProjectTypeOfTestingEnum": {
+    "enum": [
+      1,
+      2,
+      3
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Blackbox\n\n2 = Whitebox\n\n3 = Graybox",
+    "format": "int32",
+    "x-enumNames": [
+      "Blackbox",
+      "Whitebox",
+      "Graybox"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "RefreshTokenResult": {
+    "type": "object",
+    "properties": {
+      "accessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "encryptedAccessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "expireInSeconds": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "RefreshTokenResultAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/RefreshTokenResult"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReoccurrenceOptionEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = AlwaysNew\n\n1 = MatchByTitleSeverityAndAsset",
+    "format": "int32",
+    "x-enumNames": [
+      "AlwaysNew",
+      "MatchByTitleSeverityAndAsset"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ReportDto": {
+    "type": "object",
+    "properties": {
+      "guid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "version": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "status": {
+        "$ref": "#/components/schemas/ReportStatusEnum"
+      },
+      "publishedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "lastDraftSavedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "projectId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sectionList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportSectionDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ReportDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportSectionDto": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "hideFromClientPortal": {
+        "type": "boolean"
+      },
+      "contentHtml": {
+        "type": "string",
+        "nullable": true
+      },
+      "order": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportSectionTypeEnum": {
+    "enum": [
+      0,
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Standard\n\n1 = Cover\n\n2 = TableOfContents",
+    "format": "int32",
+    "x-enumNames": [
+      "Standard",
+      "Cover",
+      "TableOfContents"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "ReportStatusEnum": {
+    "enum": [
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Draft\n\n2 = Published",
+    "format": "int32",
+    "x-enumNames": [
+      "Draft",
+      "Published"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ReportTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "status": {
+        "$ref": "#/components/schemas/ReportTemplateStatusEnum"
+      },
+      "reportTemplateSectionList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportTemplateSectionDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportTemplateDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportTemplateDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportTemplateDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ReportTemplateDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportTemplatePdfToCEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Default\n\n1 = H1\n\n2 = H1H2\n\n3 = H1H2H3",
+    "format": "int32",
+    "x-enumNames": [
+      "Default",
+      "H1",
+      "H1H2",
+      "H1H2H3"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "ReportTemplateSectionDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "hideFromClientPortal": {
+        "type": "boolean"
+      },
+      "content": {
+        "type": "string",
+        "nullable": true
+      },
+      "isInExternalDownload": {
+        "type": "boolean"
+      },
+      "order": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "sectionType": {
+        "$ref": "#/components/schemas/ReportSectionTypeEnum"
+      },
+      "tableOfContentsDepth": {
+        "$ref": "#/components/schemas/ReportTemplatePdfToCEnum"
+      },
+      "tableOfContentsInternalLinks": {
+        "type": "boolean"
+      },
+      "optional": {
+        "type": "boolean"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportTemplateStatusEnum": {
+    "enum": [
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n1 = Draft\n\n2 = Published",
+    "format": "int32",
+    "x-enumNames": [
+      "Draft",
+      "Published"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "ReportVersionDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "version": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "status": {
+        "$ref": "#/components/schemas/ReportStatusEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportVersionDtoListResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ReportVersionDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "ReportVersionDtoListResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/ReportVersionDtoListResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "RequestFormDataDto": {
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "value": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "RequestProjectFormDto": {
+    "type": "object",
+    "properties": {
+      "guid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "formData": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/FormDataDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "RequestProjectFormDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RequestProjectFormDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "RequestProjectFormDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/RequestProjectFormDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "RequestProjectRequest": {
+    "required": [
+      "name"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "maxLength": 250,
+        "minLength": 1,
+        "type": "string"
+      },
+      "requestFormGuid": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "retestProjectGuid": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "requestStartDate": {
+        "type": "string",
+        "format": "date",
+        "nullable": true
+      },
+      "requestedEndDate": {
+        "type": "string",
+        "format": "date",
+        "nullable": true
+      },
+      "assetIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      },
+      "formData": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RequestFormDataDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "RolePortalEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Pentester\n\n1 = Client",
+    "format": "int32",
+    "x-enumNames": [
+      "Pentester",
+      "Client"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "RunDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "status": {
+        "$ref": "#/components/schemas/RunStatusEnum"
+      },
+      "type": {
+        "$ref": "#/components/schemas/RunTypeEnum"
+      },
+      "triggerType": {
+        "$ref": "#/components/schemas/RunTriggerTypeEnum"
+      },
+      "finishedAt": {
+        "type": "string",
+        "format": "date-time",
+        "nullable": true
+      },
+      "runNumber": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "findingIdList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "RunDtoListResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RunDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "RunDtoListResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/RunDtoListResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "RunStatusEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Draft\n\n1 = Completed\n\n2 = Processing\n\n3 = Failed\n\n4 = Scanning",
+    "format": "int32",
+    "x-enumNames": [
+      "Draft",
+      "Completed",
+      "Processing",
+      "Failed",
+      "Scanning"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "RunTriggerTypeEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = OnDemand\n\n1 = Schedule",
+    "format": "int32",
+    "x-enumNames": [
+      "OnDemand",
+      "Schedule"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "RunTypeEnum": {
+    "enum": [
+      0,
+      1
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Manual\n\n1 = Scan",
+    "format": "int32",
+    "x-enumNames": [
+      "Manual",
+      "Scan"
+    ],
+    "x-enumDescriptions": [
+      "",
+      ""
+    ]
+  },
+  "SendTwoFactorAuthCodeModel": {
+    "required": [
+      "provider"
+    ],
+    "type": "object",
+    "properties": {
+      "userId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "provider": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "additionalProperties": false
+  },
+  "SwitchedAccountAuthenticateResultModel": {
+    "type": "object",
+    "properties": {
+      "accessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "encryptedAccessToken": {
+        "type": "string",
+        "nullable": true
+      },
+      "expireInSeconds": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "TargetFieldEnum": {
+    "enum": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Title\n\n1 = Ip\n\n2 = Url\n\n3 = Hostname\n\n4 = Path\n\n5 = Ssid\n\n6 = Repository\n\n7 = DomainAd",
+    "format": "int32",
+    "x-enumNames": [
+      "Title",
+      "Ip",
+      "Url",
+      "Hostname",
+      "Path",
+      "Ssid",
+      "Repository",
+      "DomainAd"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "TaskGroupTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      },
+      "taskList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TaskTemplateDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "TaskTemplateDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "externalUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "description": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "TeamDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "teamLeaderName": {
+        "type": "string",
+        "nullable": true
+      },
+      "teamLeaderId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "userList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserDto"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "TeamDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/TeamDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "TeamDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TeamDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "TeamDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/TeamDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "TeamTypeEnum": {
+    "enum": [
+      0,
+      1,
+      2
+    ],
+    "type": "integer",
+    "description": "\n\n0 = Undefined\n\n1 = Pentesters\n\n2 = Clients",
+    "format": "int32",
+    "x-enumNames": [
+      "Undefined",
+      "Pentesters",
+      "Clients"
+    ],
+    "x-enumDescriptions": [
+      "",
+      "",
+      ""
+    ]
+  },
+  "UpdateContinuousProjectStatusRequest": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "$ref": "#/components/schemas/ContinuousProjectStatusEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "UpdateProjectStatusRequestV2": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "UpdateUserRequest": {
+    "required": [
+      "emailAddress",
+      "name",
+      "surname"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "maxLength": 64,
+        "minLength": 0,
+        "type": "string"
+      },
+      "surname": {
+        "maxLength": 64,
+        "minLength": 0,
+        "type": "string"
+      },
+      "emailAddress": {
+        "maxLength": 256,
+        "minLength": 0,
+        "type": "string",
+        "format": "email"
+      },
+      "phoneNumber": {
+        "maxLength": 32,
+        "minLength": 0,
+        "type": "string",
+        "nullable": true
+      },
+      "shouldChangePasswordOnNextLogin": {
+        "type": "boolean"
+      },
+      "sendActivationEmail": {
+        "type": "boolean"
+      },
+      "isActive": {
+        "type": "boolean"
+      },
+      "isTwoFactorEnabled": {
+        "type": "boolean"
+      },
+      "isLockoutEnabled": {
+        "type": "boolean"
+      },
+      "role": {
+        "$ref": "#/components/schemas/ApiRolesEnum"
+      }
+    },
+    "additionalProperties": false
+  },
+  "UserDto": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "clientId": {
+        "type": "string",
+        "format": "uuid",
+        "nullable": true
+      },
+      "name": {
+        "type": "string",
+        "nullable": true
+      },
+      "surname": {
+        "type": "string",
+        "nullable": true
+      },
+      "email": {
+        "type": "string",
+        "nullable": true
+      },
+      "phoneNumber": {
+        "type": "string",
+        "nullable": true
+      },
+      "isEmailConfirmed": {
+        "type": "boolean"
+      },
+      "isActive": {
+        "type": "boolean"
+      },
+      "isTwoFactorEnabled": {
+        "type": "boolean"
+      },
+      "isLockoutEnabled": {
+        "type": "boolean"
+      },
+      "role": {
+        "type": "string",
+        "nullable": true
+      },
+      "creationTime": {
+        "type": "string",
+        "format": "date-time"
+      }
+    },
+    "additionalProperties": false
+  },
+  "UserDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/UserDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "UserDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "UserDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/UserDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  },
+  "ValidationErrorInfo": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "nullable": true
+      },
+      "members": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "nullable": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "VulnerabilityTypeDto": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "nullable": true
+      },
+      "code": {
+        "type": "string",
+        "nullable": true
+      },
+      "isSystem": {
+        "type": "boolean"
+      },
+      "isVisible": {
+        "type": "boolean"
+      }
+    },
+    "additionalProperties": false
+  },
+  "VulnerabilityTypeDtoPagedResultDto": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/VulnerabilityTypeDto"
+        },
+        "nullable": true
+      },
+      "totalCount": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    "additionalProperties": false
+  },
+  "VulnerabilityTypeDtoPagedResultDtoAjaxResponse": {
+    "type": "object",
+    "properties": {
+      "targetUrl": {
+        "type": "string",
+        "nullable": true
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "error": {
+        "$ref": "#/components/schemas/ErrorInfo"
+      },
+      "unAuthorizedRequest": {
+        "type": "boolean"
+      },
+      "__abp": {
+        "type": "boolean",
+        "readOnly": true
+      },
+      "result": {
+        "$ref": "#/components/schemas/VulnerabilityTypeDtoPagedResultDto"
+      }
+    },
+    "additionalProperties": false
+  }
+}

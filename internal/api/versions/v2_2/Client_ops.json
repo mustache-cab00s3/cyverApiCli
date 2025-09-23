@@ -1,0 +1,981 @@
+{
+  "/api/v2.2/client/projects": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get a paginated list of Projects based on a filter",
+      "operationId": "ApiV2.2ClientProjectsGet",
+      "parameters": [
+        {
+          "name": "Status",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "MaxResultCount",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          }
+        },
+        {
+          "name": "SkipCount",
+          "in": "query",
+          "schema": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        },
+        {
+          "name": "Filter",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectDtoV2PagedResultDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/projects/{id}": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get a Project by ID",
+      "operationId": "ApiV2.2ClientProjectsByIdGet",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "404": {
+          "description": "Not Found"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectDtoV2AjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/projects/request-forms": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get Project Request Forms",
+      "operationId": "ApiV2.2ClientProjectsRequest-FormsGet",
+      "parameters": [
+        {
+          "name": "MaxResultCount",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          }
+        },
+        {
+          "name": "SkipCount",
+          "in": "query",
+          "schema": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        },
+        {
+          "name": "Filter",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestProjectFormDtoPagedResultDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/projects/request": {
+    "post": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Request a Project",
+      "operationId": "ApiV2.2ClientProjectsRequestPost",
+      "parameters": [
+        {
+          "name": "triggerEvents",
+          "in": "query",
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json-patch+json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          },
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          },
+          "text/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          },
+          "application/*+json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuidAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/continuous-projects": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get a paginated list of Continuous Projects based on a filter",
+      "operationId": "ApiV2.2ClientContinuous-ProjectsGet",
+      "parameters": [
+        {
+          "name": "Status",
+          "in": "query",
+          "description": "\n\n0 = Active\n\n1 = Stopped\n\n2 = Requested",
+          "schema": {
+            "$ref": "#/components/schemas/ContinuousProjectStatusEnum"
+          }
+        },
+        {
+          "name": "MaxResultCount",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          }
+        },
+        {
+          "name": "SkipCount",
+          "in": "query",
+          "schema": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        },
+        {
+          "name": "Filter",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContinuousProjectDtoPagedResultDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/continuous-projects/{id}": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get a Continuous Project by ID",
+      "operationId": "ApiV2.2ClientContinuous-ProjectsByIdGet",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "404": {
+          "description": "Not Found"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContinuousProjectDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/continuous-projects/request-forms": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get Continuous Project Request Forms",
+      "operationId": "ApiV2.2ClientContinuous-ProjectsRequest-FormsGet",
+      "parameters": [
+        {
+          "name": "MaxResultCount",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          }
+        },
+        {
+          "name": "SkipCount",
+          "in": "query",
+          "schema": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        },
+        {
+          "name": "Filter",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestProjectFormDtoPagedResultDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/continuous-projects/request": {
+    "post": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Request a Continuous Project",
+      "operationId": "ApiV2.2ClientContinuous-ProjectsRequestPost",
+      "parameters": [
+        {
+          "name": "triggerEvents",
+          "in": "query",
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json-patch+json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          },
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          },
+          "text/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          },
+          "application/*+json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestProjectRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuidAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/findings": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get a paginated list of Findings based on a filter",
+      "operationId": "ApiV2.2ClientFindingsGet",
+      "parameters": [
+        {
+          "name": "ProjectId",
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "Type",
+          "in": "query",
+          "description": "\n\n1 = Vulnerability\n\n2 = Nonconformity\n\n4 = Observation\n\n8 = Incident\n\n16 = Risk",
+          "schema": {
+            "$ref": "#/components/schemas/FindingTypeEnum"
+          }
+        },
+        {
+          "name": "Status",
+          "in": "query",
+          "description": "\n\n1 = Draft\n\n2 = PendingFix\n\n3 = Fixed\n\n4 = ReadyRetest\n\n5 = Accepted\n\n6 = ToReview\n\n7 = Reviewed\n\n8 = Mitigated\n\n9 = PartialFix\n\n10 = FalsePositive\n\n11 = Raised\n\n12 = ReOpen\n\n13 = Acknowledged\n\n14 = Identified",
+          "schema": {
+            "$ref": "#/components/schemas/FindingStatusEnum"
+          }
+        },
+        {
+          "name": "SeverityList",
+          "in": "query",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FindingCriticalityEnum"
+            }
+          }
+        },
+        {
+          "name": "VulnerabilityTypeList",
+          "in": "query",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "IdList",
+          "in": "query",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        {
+          "name": "AssetIdList",
+          "in": "query",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        {
+          "name": "MaxResultCount",
+          "in": "query",
+          "schema": {
+            "maximum": 10000,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          }
+        },
+        {
+          "name": "SkipCount",
+          "in": "query",
+          "schema": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "404": {
+          "description": "Not Found"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindingDtoPagedResultDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/findings/{id}": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get a Finding by ID",
+      "operationId": "ApiV2.2ClientFindingsByIdGet",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "includeEvidence",
+          "in": "query",
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "404": {
+          "description": "Not Found"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindingDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Set Finding status",
+      "operationId": "ApiV2.2ClientFindingsByIdPost",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "triggerEvents",
+          "in": "query",
+          "schema": {
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14
+            ],
+            "type": "integer",
+            "description": "\n\n1 = Draft\n\n2 = PendingFix\n\n3 = Fixed\n\n4 = ReadyRetest\n\n5 = Accepted\n\n6 = ToReview\n\n7 = Reviewed\n\n8 = Mitigated\n\n9 = PartialFix\n\n10 = FalsePositive\n\n11 = Raised\n\n12 = ReOpen\n\n13 = Acknowledged\n\n14 = Identified",
+            "format": "int32",
+            "x-enumNames": [
+              "Draft",
+              "PendingFix",
+              "Fixed",
+              "ReadyRetest",
+              "Accepted",
+              "ToReview",
+              "Reviewed",
+              "Mitigated",
+              "PartialFix",
+              "FalsePositive",
+              "Raised",
+              "ReOpen",
+              "Acknowledged",
+              "Identified"
+            ],
+            "x-enumDescriptions": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json-patch+json": {
+            "schema": {
+              "$ref": "#/components/schemas/FindingStatusEnum"
+            }
+          },
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FindingStatusEnum"
+            }
+          },
+          "text/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FindingStatusEnum"
+            }
+          },
+          "application/*+json": {
+            "schema": {
+              "$ref": "#/components/schemas/FindingStatusEnum"
+            }
+          }
+        }
+      },
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "204": {
+          "description": "No Content"
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/assets": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Get a paginated list of Assets based on a filter",
+      "operationId": "ApiV2.2ClientAssetsGet",
+      "parameters": [
+        {
+          "name": "TypeList",
+          "in": "query",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetTypeEnum"
+            }
+          }
+        },
+        {
+          "name": "MaxResultCount",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          }
+        },
+        {
+          "name": "SkipCount",
+          "in": "query",
+          "schema": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        },
+        {
+          "name": "Filter",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssetDtoPagedResultDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Create a new Asset",
+      "operationId": "ApiV2.2ClientAssetsPost",
+      "requestBody": {
+        "content": {
+          "application/json-patch+json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          },
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          },
+          "text/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          },
+          "application/*+json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuidAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/assets/{id}": {
+    "delete": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Delete an Asset by ID",
+      "operationId": "ApiV2.2ClientAssetsByIdDelete",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuidAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "put": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Updates an existing Asset",
+      "operationId": "ApiV2.2ClientAssetsByIdPut",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json-patch+json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          },
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          },
+          "text/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          },
+          "application/*+json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateAssetRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "400": {
+          "description": "Bad Request"
+        }
+      }
+    }
+  },
+  "/api/v2.2/client/users": {
+    "get": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Gets a list of Users based on a filter",
+      "operationId": "ApiV2.2ClientUsersGet",
+      "parameters": [
+        {
+          "name": "MaxResultCount",
+          "in": "query",
+          "schema": {
+            "type": "integer",
+            "format": "int32",
+            "default": 10
+          }
+        },
+        {
+          "name": "SkipCount",
+          "in": "query",
+          "schema": {
+            "maximum": 2147483647,
+            "minimum": 0,
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        },
+        {
+          "name": "Filter",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDtoPagedResultDtoAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "tags": [
+        "Client"
+      ],
+      "summary": "Create a new User",
+      "operationId": "ApiV2.2ClientUsersPost",
+      "requestBody": {
+        "content": {
+          "application/json-patch+json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreatClientUserRequest"
+            }
+          },
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreatClientUserRequest"
+            }
+          },
+          "text/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreatClientUserRequest"
+            }
+          },
+          "application/*+json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreatClientUserRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "400": {
+          "description": "Bad Request"
+        },
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuidAjaxResponse"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
