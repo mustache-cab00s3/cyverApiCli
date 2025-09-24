@@ -133,6 +133,10 @@ func (c *APIClient) setRequestHeaders(req *http.Request) error {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", "CyverAPI-CLI/1.0")
 
+	// Check if this is an authentication endpoint that doesn't require auth headers
+	isAuthEndpoint := strings.Contains(req.URL.Path, "/api/TokenAuth/Authenticate") ||
+		strings.Contains(req.URL.Path, "/api/TokenAuth/SendTwoFactorAuthCode")
+
 	// Check if API key is provided
 	if c.APIKey != "" {
 		logger.Debug("Setting X-API-Key header")
@@ -143,9 +147,12 @@ func (c *APIClient) setRequestHeaders(req *http.Request) error {
 		if accessToken != "" {
 			logger.Debug("Setting Authorization Bearer header")
 			req.Header.Set("Authorization", "Bearer "+accessToken)
-		} else {
+		} else if !isAuthEndpoint {
+			// Only require authentication for non-auth endpoints
 			logger.Warn("No API key or access token found for authentication")
 			return errors.NewCyverError(errors.ErrCodeAuthFailed, "no authentication credentials found", nil)
+		} else {
+			logger.Debug("Authentication endpoint - proceeding without auth headers")
 		}
 	}
 
