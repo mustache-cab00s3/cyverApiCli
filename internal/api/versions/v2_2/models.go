@@ -316,15 +316,193 @@ const (
 	FindingStatusEnum_Accepted FindingStatusEnum = 4
 )
 
+type FindingTypeEnum int32
+
+const (
+	FindingTypeEnum_Vulnerability FindingTypeEnum = 1
+	FindingTypeEnum_Nonconformity FindingTypeEnum = 2
+	FindingTypeEnum_Observation   FindingTypeEnum = 4
+	FindingTypeEnum_Incident      FindingTypeEnum = 8
+	FindingTypeEnum_Risk          FindingTypeEnum = 16
+)
+
+type FindingCriticalityEnum int32
+
+const (
+	FindingCriticalityEnum_Info     FindingCriticalityEnum = 0
+	FindingCriticalityEnum_Low      FindingCriticalityEnum = 1
+	FindingCriticalityEnum_Medium   FindingCriticalityEnum = 2
+	FindingCriticalityEnum_High     FindingCriticalityEnum = 3
+	FindingCriticalityEnum_Critical FindingCriticalityEnum = 4
+)
+
+type FindingOccurrenceEnum int32
+
+const (
+	FindingOccurrenceEnum_New          FindingOccurrenceEnum = 1
+	FindingOccurrenceEnum_Reoccurrence FindingOccurrenceEnum = 2
+)
+
+type RunStatusEnum int32
+
+const (
+	RunStatusEnum_Draft      RunStatusEnum = 0
+	RunStatusEnum_Completed  RunStatusEnum = 1
+	RunStatusEnum_Processing RunStatusEnum = 2
+	RunStatusEnum_Failed     RunStatusEnum = 3
+	RunStatusEnum_Scanning   RunStatusEnum = 4
+)
+
+type FindingPciComplianceEnum int32
+
+const (
+	FindingPciComplianceEnum_Pass FindingPciComplianceEnum = 0
+	FindingPciComplianceEnum_Fail FindingPciComplianceEnum = 1
+)
+
+// --- Additional DTOs for FindingDto ---
+
+type FindingCvssDto struct {
+	Cvss40Vector *string  `json:"cvss40Vector,omitempty"`
+	Cvss40Score  *float64 `json:"cvss40Score,omitempty"`
+	Cvss31Vector *string  `json:"cvss31Vector,omitempty"`
+	Cvss31Score  *float64 `json:"cvss31Score,omitempty"`
+	Cvss30Vector *string  `json:"cvss30Vector,omitempty"`
+	Cvss30Score  *float64 `json:"cvss30Score,omitempty"`
+	Cvss20Vector *string  `json:"cvss20Vector,omitempty"`
+	Cvss20Score  *float64 `json:"cvss20Score,omitempty"`
+}
+
+type ProjectTaskDto struct {
+	ID          string          `json:"id"`
+	Code        *string         `json:"code,omitempty"`
+	Name        *string         `json:"name,omitempty"`
+	Description *string         `json:"description,omitempty"`
+	Status      *string         `json:"status,omitempty"`
+	ProjectID   *string         `json:"projectId,omitempty"`
+	CreatedAt   *string         `json:"creationTime,omitempty"`
+	UpdatedAt   *string         `json:"lastModificationTime,omitempty"`
+	ParentTask  *ProjectTaskDto `json:"parentTask,omitempty"`
+}
+
+type ProjectControlDto struct {
+	ID            string             `json:"id"`
+	Code          *string            `json:"code,omitempty"`
+	Name          *string            `json:"name,omitempty"`
+	Description   *string            `json:"description,omitempty"`
+	Status        *string            `json:"status,omitempty"`
+	ProjectID     *string            `json:"projectId,omitempty"`
+	CreatedAt     *string            `json:"creationTime,omitempty"`
+	UpdatedAt     *string            `json:"lastModificationTime,omitempty"`
+	ParentControl *ProjectControlDto `json:"parentControl,omitempty"`
+}
+
+type LabelTypeEnum int32
+
+const (
+	LabelTypeEnum_Project LabelTypeEnum = 0
+	LabelTypeEnum_Finding LabelTypeEnum = 1
+	LabelTypeEnum_Asset   LabelTypeEnum = 2
+	LabelTypeEnum_Client  LabelTypeEnum = 3
+)
+
+type LabelDto struct {
+	ID   string         `json:"id"`
+	Text *string        `json:"text,omitempty"`
+	Type *LabelTypeEnum `json:"type,omitempty"`
+}
+
+type FindingEvidenceDto struct {
+	ID          *string `json:"id,omitempty"`
+	Title       string  `json:"title"`
+	Description *string `json:"description,omitempty"`
+	FilePath    *string `json:"filePath,omitempty"`
+	FileSize    *int64  `json:"fileSize,omitempty"`
+	MimeType    *string `json:"mimeType,omitempty"`
+	CreatedAt   *string `json:"creationTime,omitempty"`
+}
+
+type FindingRunDto struct {
+	RunID     string  `json:"runId"`
+	RunNumber int32   `json:"runNumber"`
+	RunName   *string `json:"runName,omitempty"`
+	Status    *string `json:"status,omitempty"`
+	CreatedAt *string `json:"creationTime,omitempty"`
+}
+
+type ExternalUrlDto struct {
+	Title *string `json:"title,omitempty"`
+	Link  *string `json:"link,omitempty"`
+}
+
+type FormFieldTypeEnum int32
+
+const (
+	FormFieldTypeEnum_Text     FormFieldTypeEnum = 0
+	FormFieldTypeEnum_Number   FormFieldTypeEnum = 1
+	FormFieldTypeEnum_Date     FormFieldTypeEnum = 2
+	FormFieldTypeEnum_Select   FormFieldTypeEnum = 3
+	FormFieldTypeEnum_TextArea FormFieldTypeEnum = 4
+)
+
+type CustomFindingFieldAPIDto struct {
+	Field     *string            `json:"field,omitempty"`
+	FieldType *FormFieldTypeEnum `json:"fieldType,omitempty"`
+	Value     *string            `json:"value,omitempty"`
+}
+
 type FindingDto struct {
-	ID          string               `json:"id"`
-	Name        *string              `json:"name,omitempty"`
-	Description *string              `json:"description,omitempty"`
-	Severity    *FindingSeverityEnum `json:"severity,omitempty"`
-	Status      *FindingStatusEnum   `json:"status,omitempty"`
-	ProjectID   *string              `json:"projectId,omitempty"`
-	CreatedAt   *string              `json:"creationTime,omitempty"`
-	UpdatedAt   *string              `json:"lastModificationTime"`
+	ID                         string                      `json:"id"`
+	ParentID                   *string                     `json:"parentId,omitempty"`
+	Code                       *string                     `json:"code,omitempty"`
+	Name                       *string                     `json:"name,omitempty"`
+	Description                *string                     `json:"description,omitempty"`
+	JiraIssueKey               *string                     `json:"jiraIssueKey,omitempty"`
+	Impact                     *int32                      `json:"impact,omitempty"`
+	ImpactDescription          *string                     `json:"impactDescription,omitempty"`
+	Likelihood                 *int32                      `json:"likelihood,omitempty"`
+	LikelihoodDescription      *string                     `json:"likelihoodDescription,omitempty"`
+	Type                       *FindingTypeEnum            `json:"type,omitempty"`
+	Status                     *FindingStatusEnum          `json:"status,omitempty"`
+	Severity                   *FindingCriticalityEnum     `json:"severity,omitempty"`
+	Occurrence                 *FindingOccurrenceEnum      `json:"occurrence,omitempty"`
+	RunStatus                  *RunStatusEnum              `json:"runStatus,omitempty"`
+	ComplianceStatus           *FindingPciComplianceEnum   `json:"complianceStatus,omitempty"`
+	ComplianceComment          *string                     `json:"complianceComment,omitempty"`
+	Recommendation             *string                     `json:"recommendation,omitempty"`
+	BackgroundInformation      *string                     `json:"backgroundInformation,omitempty"`
+	CVSS                       *FindingCvssDto             `json:"cvss,omitempty"`
+	ProjectName                *string                     `json:"projectName,omitempty"`
+	ProjectID                  *string                     `json:"projectId,omitempty"`
+	ClientName                 *string                     `json:"clientName,omitempty"`
+	ClientID                   *string                     `json:"clientId,omitempty"`
+	ReporterName               *string                     `json:"reporterName,omitempty"`
+	ReporterID                 *string                     `json:"reporterId,omitempty"`
+	ReviewerName               *string                     `json:"reviewerName,omitempty"`
+	ReviewerID                 *string                     `json:"reviewerId,omitempty"`
+	ClientAssigneeName         *string                     `json:"clientAssigneeName,omitempty"`
+	ClientAssigneeID           *string                     `json:"clientAssigneeId,omitempty"`
+	CreatedAt                  *string                     `json:"creationTime,omitempty"`
+	VisibleToClient            *string                     `json:"visibleToClient,omitempty"`
+	ClosedOn                   *string                     `json:"closedOn,omitempty"`
+	ReviewedOn                 *string                     `json:"reviewedOn,omitempty"`
+	ProjectTask                *ProjectTaskDto             `json:"projectTask,omitempty"`
+	VulnerabilityTypeList      []string                    `json:"vulnerabilityTypeList,omitempty"`
+	CWEList                    []string                    `json:"cweList,omitempty"`
+	CVEList                    []string                    `json:"cveList,omitempty"`
+	MitreAttackTacticsList     []string                    `json:"mitreAttackTacticsList,omitempty"`
+	MitreAttackTechniquesList  []string                    `json:"mitreAttackTechniquesList,omitempty"`
+	MitreAttackMitigationsList []string                    `json:"mitreAttackMitigationsList,omitempty"`
+	AssetIDList                []string                    `json:"assetIdList,omitempty"`
+	ReoccurrenceIDList         []string                    `json:"reoccurrenceIdList,omitempty"`
+	ProjectControlList         []*ProjectControlDto        `json:"projectControlList,omitempty"`
+	LabelList                  []*LabelDto                 `json:"labelList,omitempty"`
+	FindingEvidenceList        []*FindingEvidenceDto       `json:"findingEvidenceList,omitempty"`
+	RunList                    []*FindingRunDto            `json:"runList,omitempty"`
+	ExternalUrlList            []*ExternalUrlDto           `json:"externalUrlList,omitempty"`
+	CustomFields               []*CustomFindingFieldAPIDto `json:"customFields,omitempty"`
+	ExternalUrlJSON            *string                     `json:"externalUrlJson,omitempty"`
+	CustomFieldsJSON           *string                     `json:"customFieldsJson,omitempty"`
 }
 
 type FindingDtoAjaxResponse struct {
@@ -767,13 +945,7 @@ type ComplianceNormTemplateDtoPagedResultDtoAjaxResponse struct {
 	Result              *ComplianceNormTemplateDtoPagedResultDto `json:"result,omitempty"`
 }
 
-// Label Models
-type LabelDto struct {
-	ID          string  `json:"id"`
-	Name        *string `json:"name,omitempty"`
-	Description *string `json:"description,omitempty"`
-	Type        *string `json:"type,omitempty"`
-}
+// Label Models (LabelDto is already defined above)
 
 type LabelDtoPagedResultDto struct {
 	Items      []*LabelDto `json:"items,omitempty"`
