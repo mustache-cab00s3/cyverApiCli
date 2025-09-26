@@ -94,16 +94,16 @@ func printSimpleAssetsTable(assets *v2_2.AssetDtoPagedResultDtoAjaxResponse) err
 
 // printSimpleRequestFormsList prints a simple request forms list
 func printSimpleRequestFormsList(requestForms *v2_2.RequestProjectFormDtoPagedResultDtoAjaxResponse) error {
-	if requestForms == nil || len(requestForms.Data) == 0 {
+	if requestForms == nil || requestForms.Result == nil || len(requestForms.Result.Items) == 0 {
 		fmt.Println("[]")
 		return nil
 	}
 
-	simpleList := make([]map[string]string, len(requestForms.Data))
-	for i, form := range requestForms.Data {
+	simpleList := make([]map[string]string, len(requestForms.Result.Items))
+	for i, form := range requestForms.Result.Items {
 		simpleList[i] = map[string]string{
-			"id":   form.ID,
-			"name": form.Name,
+			"id":   form.GUID,
+			"name": getStringValue(form.Title),
 		}
 	}
 	return shared.PrintJSONResponse(simpleList)
@@ -111,7 +111,7 @@ func printSimpleRequestFormsList(requestForms *v2_2.RequestProjectFormDtoPagedRe
 
 // printSimpleRequestFormsTable prints a simple request forms table
 func printSimpleRequestFormsTable(requestForms *v2_2.RequestProjectFormDtoPagedResultDtoAjaxResponse) error {
-	if requestForms == nil || len(requestForms.Data) == 0 {
+	if requestForms == nil || requestForms.Result == nil || len(requestForms.Result.Items) == 0 {
 		fmt.Println("No request forms found")
 		return nil
 	}
@@ -119,8 +119,8 @@ func printSimpleRequestFormsTable(requestForms *v2_2.RequestProjectFormDtoPagedR
 	fmt.Println("┌─────────────────────────────────────────────────────────────┐")
 	fmt.Println("│                      REQUEST FORMS                         │")
 	fmt.Println("├─────────────────────────────────────────────────────────────┤")
-	for _, form := range requestForms.Data {
-		fmt.Printf("│ %-20s │ %-35s │\n", form.ID, form.Name)
+	for _, form := range requestForms.Result.Items {
+		fmt.Printf("│ %-20s │ %-35s │\n", form.GUID, getStringValue(form.Title))
 	}
 	fmt.Println("└─────────────────────────────────────────────────────────────┘")
 	return nil
@@ -132,16 +132,16 @@ func printSimpleRequestFormsTable(requestForms *v2_2.RequestProjectFormDtoPagedR
 
 // printSimpleContinuousProjectsList prints a simple continuous projects list
 func printSimpleContinuousProjectsList(continuousProjects *v2_2.ContinuousProjectDtoPagedResultDtoAjaxResponse) error {
-	if continuousProjects == nil || len(continuousProjects.Data) == 0 {
+	if continuousProjects == nil || continuousProjects.Result == nil || len(continuousProjects.Result.Items) == 0 {
 		fmt.Println("[]")
 		return nil
 	}
 
-	simpleList := make([]map[string]string, len(continuousProjects.Data))
-	for i, project := range continuousProjects.Data {
+	simpleList := make([]map[string]string, len(continuousProjects.Result.Items))
+	for i, project := range continuousProjects.Result.Items {
 		simpleList[i] = map[string]string{
 			"id":   project.ID,
-			"name": project.Name,
+			"name": getStringValue(project.Name),
 		}
 	}
 	return shared.PrintJSONResponse(simpleList)
@@ -149,7 +149,7 @@ func printSimpleContinuousProjectsList(continuousProjects *v2_2.ContinuousProjec
 
 // printSimpleContinuousProjectsTable prints a simple continuous projects table
 func printSimpleContinuousProjectsTable(continuousProjects *v2_2.ContinuousProjectDtoPagedResultDtoAjaxResponse) error {
-	if continuousProjects == nil || len(continuousProjects.Data) == 0 {
+	if continuousProjects == nil || continuousProjects.Result == nil || len(continuousProjects.Result.Items) == 0 {
 		fmt.Println("No continuous projects found")
 		return nil
 	}
@@ -157,8 +157,8 @@ func printSimpleContinuousProjectsTable(continuousProjects *v2_2.ContinuousProje
 	fmt.Println("┌─────────────────────────────────────────────────────────────┐")
 	fmt.Println("│                    CONTINUOUS PROJECTS                     │")
 	fmt.Println("├─────────────────────────────────────────────────────────────┤")
-	for _, project := range continuousProjects.Data {
-		fmt.Printf("│ %-20s │ %-35s │\n", project.ID, project.Name)
+	for _, project := range continuousProjects.Result.Items {
+		fmt.Printf("│ %-20s │ %-35s │\n", project.ID, getStringValue(project.Name))
 	}
 	fmt.Println("└─────────────────────────────────────────────────────────────┘")
 	return nil
@@ -166,7 +166,7 @@ func printSimpleContinuousProjectsTable(continuousProjects *v2_2.ContinuousProje
 
 // printContinuousProjectTable prints continuous project information in table format
 func printContinuousProjectTable(continuousProject *v2_2.ContinuousProjectDtoAjaxResponse) error {
-	if continuousProject == nil || continuousProject.Data.ID == "" {
+	if continuousProject == nil || continuousProject.Result == nil || continuousProject.Result.ID == "" {
 		fmt.Println("No continuous project information available")
 		return nil
 	}
@@ -174,26 +174,28 @@ func printContinuousProjectTable(continuousProject *v2_2.ContinuousProjectDtoAja
 	fmt.Println("┌─────────────────────────────────────────────────────────────┐")
 	fmt.Println("│                  CONTINUOUS PROJECT INFO                   │")
 	fmt.Println("├─────────────────────────────────────────────────────────────┤")
-	fmt.Printf("│ ID:          %-45s │\n", continuousProject.Data.ID)
-	fmt.Printf("│ Name:        %-45s │\n", continuousProject.Data.Name)
-	fmt.Printf("│ Description: %-45s │\n", continuousProject.Data.Description)
-	fmt.Printf("│ Status:      %-45s │\n", continuousProject.Data.Status)
+	fmt.Printf("│ ID:          %-45s │\n", continuousProject.Result.ID)
+	fmt.Printf("│ Name:        %-45s │\n", getStringValue(continuousProject.Result.Name))
+	fmt.Printf("│ Code:        %-45s │\n", getStringValue(continuousProject.Result.Code))
+	if continuousProject.Result.Status != nil {
+		fmt.Printf("│ Status:      %-45d │\n", *continuousProject.Result.Status)
+	}
 	fmt.Println("└─────────────────────────────────────────────────────────────┘")
 	return nil
 }
 
 // printSimpleContinuousRequestFormsList prints a simple continuous request forms list
 func printSimpleContinuousRequestFormsList(requestForms *v2_2.RequestProjectFormDtoPagedResultDtoAjaxResponse) error {
-	if requestForms == nil || len(requestForms.Data) == 0 {
+	if requestForms == nil || requestForms.Result == nil || len(requestForms.Result.Items) == 0 {
 		fmt.Println("[]")
 		return nil
 	}
 
-	simpleList := make([]map[string]string, len(requestForms.Data))
-	for i, form := range requestForms.Data {
+	simpleList := make([]map[string]string, len(requestForms.Result.Items))
+	for i, form := range requestForms.Result.Items {
 		simpleList[i] = map[string]string{
-			"id":   form.ID,
-			"name": form.Name,
+			"id":   form.GUID,
+			"name": getStringValue(form.Title),
 		}
 	}
 	return shared.PrintJSONResponse(simpleList)
@@ -201,7 +203,7 @@ func printSimpleContinuousRequestFormsList(requestForms *v2_2.RequestProjectForm
 
 // printSimpleContinuousRequestFormsTable prints a simple continuous request forms table
 func printSimpleContinuousRequestFormsTable(requestForms *v2_2.RequestProjectFormDtoPagedResultDtoAjaxResponse) error {
-	if requestForms == nil || len(requestForms.Data) == 0 {
+	if requestForms == nil || requestForms.Result == nil || len(requestForms.Result.Items) == 0 {
 		fmt.Println("No continuous project request forms found")
 		return nil
 	}
@@ -209,8 +211,8 @@ func printSimpleContinuousRequestFormsTable(requestForms *v2_2.RequestProjectFor
 	fmt.Println("┌─────────────────────────────────────────────────────────────┐")
 	fmt.Println("│                CONTINUOUS REQUEST FORMS                    │")
 	fmt.Println("├─────────────────────────────────────────────────────────────┤")
-	for _, form := range requestForms.Data {
-		fmt.Printf("│ %-20s │ %-35s │\n", form.ID, form.Name)
+	for _, form := range requestForms.Result.Items {
+		fmt.Printf("│ %-20s │ %-35s │\n", form.GUID, getStringValue(form.Title))
 	}
 	fmt.Println("└─────────────────────────────────────────────────────────────┘")
 	return nil
