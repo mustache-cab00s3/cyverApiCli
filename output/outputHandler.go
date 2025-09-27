@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/jedib0t/go-pretty/v6/table"
 	log "github.com/yourusername/cyverApiCli/logger"
 )
 
@@ -275,50 +276,25 @@ func PrintSimpleProjectsTable(data interface{}, verboseLevel int) error {
 		return nil
 	}
 
-	// Calculate column widths
-	maxIDWidth := len("ID")
-	maxNameWidth := len("NAME")
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Projects")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
+	// Set table headers
+	t.AppendHeader(table.Row{"ID", "Name"})
+
+	// Add each project as a row
 	for _, project := range simpleProjects {
-		if len(project.ID) > maxIDWidth {
-			maxIDWidth = len(project.ID)
-		}
-		if len(project.Name) > maxNameWidth {
-			maxNameWidth = len(project.Name)
-		}
+		t.AppendRow(table.Row{project.ID, project.Name})
 	}
 
-	// Ensure minimum widths
-	if maxIDWidth < 10 {
-		maxIDWidth = 10
-	}
-	if maxNameWidth < 20 {
-		maxNameWidth = 20
-	}
-
-	// Print header
-	header := fmt.Sprintf("| %-*s | %-*s |", maxIDWidth, "ID", maxNameWidth, "NAME")
-	separator := fmt.Sprintf("|%s|%s|",
-		strings.Repeat("-", maxIDWidth+2),
-		strings.Repeat("-", maxNameWidth+2))
-
-	fmt.Println(separator)
-	fmt.Println(header)
-	fmt.Println(separator)
-
-	// Print rows
-	for _, project := range simpleProjects {
-		// Truncate name if too long
-		displayName := project.Name
-		if len(displayName) > maxNameWidth {
-			displayName = displayName[:maxNameWidth-3] + "..."
-		}
-
-		row := fmt.Sprintf("| %-*s | %-*s |", maxIDWidth, project.ID, maxNameWidth, displayName)
-		fmt.Println(row)
-	}
-
-	fmt.Println(separator)
+	// Render the table
+	t.Render()
 	log.GetLogger(verboseLevel).Info("Simple projects table formatted successfully\n")
 	return nil
 }
@@ -564,50 +540,25 @@ func PrintSimpleFindingsTable(data interface{}, verboseLevel int) error {
 		return nil
 	}
 
-	// Calculate column widths
-	maxIDWidth := len("ID")
-	maxTitleWidth := len("TITLE")
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Findings")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
+	// Set table headers
+	t.AppendHeader(table.Row{"ID", "Title"})
+
+	// Add each finding as a row
 	for _, finding := range simpleFindings {
-		if len(finding.ID) > maxIDWidth {
-			maxIDWidth = len(finding.ID)
-		}
-		if len(finding.Title) > maxTitleWidth {
-			maxTitleWidth = len(finding.Title)
-		}
+		t.AppendRow(table.Row{finding.ID, finding.Title})
 	}
 
-	// Ensure minimum widths
-	if maxIDWidth < 10 {
-		maxIDWidth = 10
-	}
-	if maxTitleWidth < 20 {
-		maxTitleWidth = 20
-	}
-
-	// Print header
-	header := fmt.Sprintf("| %-*s | %-*s |", maxIDWidth, "ID", maxTitleWidth, "TITLE")
-	separator := fmt.Sprintf("|%s|%s|",
-		strings.Repeat("-", maxIDWidth+2),
-		strings.Repeat("-", maxTitleWidth+2))
-
-	fmt.Println(separator)
-	fmt.Println(header)
-	fmt.Println(separator)
-
-	// Print rows
-	for _, finding := range simpleFindings {
-		// Truncate title if too long
-		displayTitle := finding.Title
-		if len(displayTitle) > maxTitleWidth {
-			displayTitle = displayTitle[:maxTitleWidth-3] + "..."
-		}
-
-		row := fmt.Sprintf("| %-*s | %-*s |", maxIDWidth, finding.ID, maxTitleWidth, displayTitle)
-		fmt.Println(row)
-	}
-
-	fmt.Println(separator)
+	// Render the table
+	t.Render()
 	log.GetLogger(verboseLevel).Info("Simple findings table formatted successfully\n")
 	return nil
 }
@@ -1019,14 +970,19 @@ func PrintClientsTable(clients interface{}, verboseLevel int) error {
 		return nil
 	}
 
-	// Print header
-	fmt.Println("┌─────────────────────────────────────────────────────────────────────────────────────┐")
-	fmt.Println("│                                        Clients                                        │")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
-	fmt.Printf("│ %-36s │ %-20s │ %-30s │ %-10s │\n", "ID", "Name", "Email", "Status")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Clients")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
-	// Print each client
+	// Set table headers
+	t.AppendHeader(table.Row{"ID", "Name", "Email", "Status"})
+
+	// Add each client as a row
 	for i := 0; i < items.Len(); i++ {
 		client := items.Index(i)
 		if client.Kind() == reflect.Ptr {
@@ -1060,14 +1016,12 @@ func PrintClientsTable(clients interface{}, verboseLevel int) error {
 			}
 		}
 
-		fmt.Printf("│ %-36s │ %-20s │ %-30s │ %-10s │\n",
-			truncateString(id, 36),
-			truncateString(name, 20),
-			truncateString(email, 30),
-			truncateString(status, 10))
+		t.AppendRow(table.Row{id, name, email, status})
 	}
 
-	fmt.Println("└─────────────────────────────────────────────────────────────────────────────────────┘")
+	// Render the table
+	t.Render()
+	log.GetLogger(verboseLevel).Info("Clients table formatted successfully\n")
 	return nil
 }
 
@@ -1114,14 +1068,19 @@ func PrintPentestersTable(pentesters interface{}, verboseLevel int) error {
 		return nil
 	}
 
-	// Print header
-	fmt.Println("┌─────────────────────────────────────────────────────────────────────────────────────┐")
-	fmt.Println("│                                    Pentesters                                        │")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
-	fmt.Printf("│ %-36s │ %-20s │ %-30s │\n", "ID", "Name", "Email")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Pentesters")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
-	// Print each pentester
+	// Set table headers
+	t.AppendHeader(table.Row{"ID", "Name", "Email"})
+
+	// Add each pentester as a row
 	for i := 0; i < items.Len(); i++ {
 		pentester := items.Index(i)
 		if pentester.Kind() == reflect.Ptr {
@@ -1148,13 +1107,11 @@ func PrintPentestersTable(pentesters interface{}, verboseLevel int) error {
 			}
 		}
 
-		fmt.Printf("│ %-36s │ %-20s │ %-30s │\n",
-			truncateString(id, 36),
-			truncateString(name, 20),
-			truncateString(email, 30))
+		t.AppendRow(table.Row{id, name, email})
 	}
 
-	fmt.Println("└─────────────────────────────────────────────────────────────────────────────────────┘")
+	// Render the table
+	t.Render()
 	return nil
 }
 
@@ -1175,14 +1132,19 @@ func PrintChecklistsTable(checklists interface{}, verboseLevel int) error {
 		return nil
 	}
 
-	// Print header
-	fmt.Println("┌─────────────────────────────────────────────────────────────────────────────────────┐")
-	fmt.Println("│                                    Checklists                                        │")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
-	fmt.Printf("│ %-36s │ %-20s │ %-30s │\n", "ID", "Name", "Status")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Checklists")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
-	// Print each checklist
+	// Set table headers
+	t.AppendHeader(table.Row{"ID", "Name", "Status"})
+
+	// Add each checklist as a row
 	for i := 0; i < val.Len(); i++ {
 		checklist := val.Index(i)
 		if checklist.Kind() == reflect.Ptr {
@@ -1201,13 +1163,11 @@ func PrintChecklistsTable(checklists interface{}, verboseLevel int) error {
 			status = fmt.Sprintf("%v", statusField.Interface())
 		}
 
-		fmt.Printf("│ %-36s │ %-20s │ %-30s │\n",
-			truncateString(id, 36),
-			truncateString(name, 20),
-			truncateString(status, 30))
+		t.AppendRow(table.Row{id, name, status})
 	}
 
-	fmt.Println("└─────────────────────────────────────────────────────────────────────────────────────┘")
+	// Render the table
+	t.Render()
 	return nil
 }
 
@@ -1228,14 +1188,19 @@ func PrintComplianceNormsTable(complianceNorms interface{}, verboseLevel int) er
 		return nil
 	}
 
-	// Print header
-	fmt.Println("┌─────────────────────────────────────────────────────────────────────────────────────┐")
-	fmt.Println("│                                 Compliance Norms                                     │")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
-	fmt.Printf("│ %-36s │ %-20s │ %-30s │\n", "ID", "Name", "Status")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Compliance Norms")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
-	// Print each compliance norm
+	// Set table headers
+	t.AppendHeader(table.Row{"ID", "Name", "Status"})
+
+	// Add each compliance norm as a row
 	for i := 0; i < val.Len(); i++ {
 		norm := val.Index(i)
 		if norm.Kind() == reflect.Ptr {
@@ -1254,13 +1219,11 @@ func PrintComplianceNormsTable(complianceNorms interface{}, verboseLevel int) er
 			status = fmt.Sprintf("%v", statusField.Interface())
 		}
 
-		fmt.Printf("│ %-36s │ %-20s │ %-30s │\n",
-			truncateString(id, 36),
-			truncateString(name, 20),
-			truncateString(status, 30))
+		t.AppendRow(table.Row{id, name, status})
 	}
 
-	fmt.Println("└─────────────────────────────────────────────────────────────────────────────────────┘")
+	// Render the table
+	t.Render()
 	return nil
 }
 
@@ -1281,14 +1244,19 @@ func PrintReportVersionsTable(reportVersions interface{}, verboseLevel int) erro
 		return nil
 	}
 
-	// Print header
-	fmt.Println("┌─────────────────────────────────────────────────────────────────────────────────────┐")
-	fmt.Println("│                                 Report Versions                                      │")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
-	fmt.Printf("│ %-36s │ %-15s │ %-20s │ %-15s │\n", "ID", "Version", "Created At", "Status")
-	fmt.Println("├─────────────────────────────────────────────────────────────────────────────────────┤")
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Report Versions")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
-	// Print each report version
+	// Set table headers
+	t.AppendHeader(table.Row{"ID", "Version", "Created At", "Status"})
+
+	// Add each report version as a row
 	for i := 0; i < val.Len(); i++ {
 		version := val.Index(i)
 		if version.Kind() == reflect.Ptr {
@@ -1310,14 +1278,11 @@ func PrintReportVersionsTable(reportVersions interface{}, verboseLevel int) erro
 			status = fmt.Sprintf("%v", statusField.Interface())
 		}
 
-		fmt.Printf("│ %-36s │ %-15s │ %-20s │ %-15s │\n",
-			truncateString(id, 36),
-			truncateString(versionStr, 15),
-			truncateString(createdAt, 20),
-			truncateString(status, 15))
+		t.AppendRow(table.Row{id, versionStr, createdAt, status})
 	}
 
-	fmt.Println("└─────────────────────────────────────────────────────────────────────────────────────┘")
+	// Render the table
+	t.Render()
 	return nil
 }
 
@@ -1557,44 +1522,34 @@ func generateCustomTable(items []interface{}, selectedFields []string, verboseLe
 		return nil
 	}
 
-	// Calculate column widths
-	columnWidths := make([]int, len(selectedFields))
+	// Create a new table
+	t := table.NewWriter()
+	t.SetOutputMirror(os.Stdout)
+	t.SetStyle(table.StyleColoredBright)
+	t.SetTitle("Custom Data")
+	t.Style().Options.SeparateRows = true
+	t.Style().Options.DrawBorder = true
+	t.Style().Options.SeparateColumns = true
 
-	// Initialize with header widths
+	// Set table headers
+	headerRow := make([]interface{}, len(selectedFields))
 	for i, field := range selectedFields {
-		columnWidths[i] = len(field)
+		headerRow[i] = field
 	}
+	t.AppendHeader(table.Row(headerRow))
 
-	// Calculate maximum width for each column
+	// Add each item as a row
 	for _, item := range items {
-		for i, field := range selectedFields {
+		var row []interface{}
+		for _, field := range selectedFields {
 			value := getFieldValue(item, field)
-			valueStr := fmt.Sprintf("%v", value)
-			if len(valueStr) > columnWidths[i] {
-				columnWidths[i] = len(valueStr)
-			}
+			row = append(row, value)
 		}
+		t.AppendRow(table.Row(row))
 	}
 
-	// Ensure minimum widths
-	for i := range columnWidths {
-		if columnWidths[i] < 10 {
-			columnWidths[i] = 10
-		}
-	}
-
-	// Print table header
-	fmt.Println()
-	printTableSeparator(columnWidths)
-	printTableHeader(selectedFields, columnWidths)
-	printTableSeparator(columnWidths)
-
-	// Print table rows
-	for _, item := range items {
-		printTableRow(item, selectedFields, columnWidths)
-	}
-
-	printTableSeparator(columnWidths)
+	// Render the table
+	t.Render()
 	log.GetLogger(verboseLevel).Info("Custom table formatted successfully\n")
 	return nil
 }
@@ -1702,39 +1657,4 @@ func dereferenceValue(value interface{}) interface{} {
 		// For any other type, try to convert to string
 		return fmt.Sprintf("%v", val.Interface())
 	}
-}
-
-// printTableSeparator prints a separator line for the table
-func printTableSeparator(columnWidths []int) {
-	fmt.Print("|")
-	for _, width := range columnWidths {
-		fmt.Printf("%s|", strings.Repeat("-", width+2))
-	}
-	fmt.Println()
-}
-
-// printTableHeader prints the table header
-func printTableHeader(fields []string, columnWidths []int) {
-	fmt.Print("|")
-	for i, field := range fields {
-		fmt.Printf(" %-*s |", columnWidths[i], strings.ToUpper(field))
-	}
-	fmt.Println()
-}
-
-// printTableRow prints a single table row
-func printTableRow(item interface{}, fields []string, columnWidths []int) {
-	fmt.Print("|")
-	for i, field := range fields {
-		value := getFieldValue(item, field)
-		valueStr := fmt.Sprintf("%v", value)
-
-		// Truncate if too long
-		if len(valueStr) > columnWidths[i] {
-			valueStr = valueStr[:columnWidths[i]-3] + "..."
-		}
-
-		fmt.Printf(" %-*s |", columnWidths[i], valueStr)
-	}
-	fmt.Println()
 }
