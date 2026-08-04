@@ -35,7 +35,7 @@ var getUsersCmd = &cobra.Command{
 				return
 			}
 
-			users, err := client.ClientOps.GetUsers(maxResultCount, skipCount, filter)
+			users, err := client.ClientOps.ApiV22ClientUsersGet(maxResultCount, skipCount, filter)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -124,7 +124,7 @@ var createUserCmd = &cobra.Command{
 				return
 			}
 
-			result, err := client.ClientOps.CreateUser(body)
+			result, err := client.ClientOps.ApiV22ClientUsersPost(body)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return

@@ -653,53 +653,135 @@ func PrintProjectTable(project interface{}, verboseLevel int) error {
 		}
 
 		if val.Kind() == reflect.Struct {
-			// Try to get ID field (case insensitive)
-			idField := val.FieldByName("ID")
-			if idField.IsValid() {
-				id = fmt.Sprintf("%v", idField.Interface())
-			}
-
-			// Try to get Name field - handle pointer to string case
-			nameField := val.FieldByName("Name")
-			if nameField.IsValid() {
-				if nameField.Kind() == reflect.Ptr && !nameField.IsNil() {
-					name = fmt.Sprintf("%v", nameField.Elem().Interface())
-				} else if nameField.Kind() != reflect.Ptr {
-					name = fmt.Sprintf("%v", nameField.Interface())
+			// First, check if this is an AjaxResponse with a Result field
+			resultField := val.FieldByName("Result")
+			if resultField.IsValid() && !resultField.IsNil() {
+				// Extract project data from Result field
+				resultVal := resultField
+				if resultVal.Kind() == reflect.Ptr {
+					resultVal = resultVal.Elem()
 				}
-			}
 
-			// Try to get Description field - handle pointer to string case
-			descField := val.FieldByName("Description")
-			if descField.IsValid() {
-				if descField.Kind() == reflect.Ptr && !descField.IsNil() {
-					description = fmt.Sprintf("%v", descField.Elem().Interface())
-				} else if descField.Kind() != reflect.Ptr {
-					description = fmt.Sprintf("%v", descField.Interface())
+				if resultVal.Kind() == reflect.Struct {
+					// Extract ID field
+					idField := resultVal.FieldByName("ID")
+					if idField.IsValid() {
+						id = fmt.Sprintf("%v", idField.Interface())
+					}
+
+					// Extract Name field - handle pointer to string case
+					nameField := resultVal.FieldByName("Name")
+					if nameField.IsValid() {
+						if nameField.Kind() == reflect.Ptr && !nameField.IsNil() {
+							name = fmt.Sprintf("%v", nameField.Elem().Interface())
+						} else if nameField.Kind() != reflect.Ptr {
+							name = fmt.Sprintf("%v", nameField.Interface())
+						}
+					}
+
+					// Extract Description field - handle pointer to string case
+					descField := resultVal.FieldByName("Description")
+					if descField.IsValid() {
+						if descField.Kind() == reflect.Ptr && !descField.IsNil() {
+							description = fmt.Sprintf("%v", descField.Elem().Interface())
+						} else if descField.Kind() != reflect.Ptr {
+							description = fmt.Sprintf("%v", descField.Interface())
+						}
+					}
+
+					// Extract Status field - handle pointer to string case
+					statusField := resultVal.FieldByName("Status")
+					if statusField.IsValid() {
+						if statusField.Kind() == reflect.Ptr && !statusField.IsNil() {
+							status = fmt.Sprintf("%v", statusField.Elem().Interface())
+						} else if statusField.Kind() != reflect.Ptr {
+							status = fmt.Sprintf("%v", statusField.Interface())
+						}
+					}
+
+					// Extract ClientID field
+					clientField := resultVal.FieldByName("ClientID")
+					if clientField.IsValid() {
+						if clientField.Kind() == reflect.Ptr && !clientField.IsNil() {
+							clientID = fmt.Sprintf("%v", clientField.Elem().Interface())
+						} else if clientField.Kind() != reflect.Ptr {
+							clientID = fmt.Sprintf("%v", clientField.Interface())
+						}
+					}
+
+					// Extract LabelList field (for ProjectDtoV2) or LabelIDs field
+					labelListField := resultVal.FieldByName("LabelList")
+					if labelListField.IsValid() && labelListField.Kind() == reflect.Slice {
+						for i := 0; i < labelListField.Len(); i++ {
+							labelItem := labelListField.Index(i)
+							if labelItem.Kind() == reflect.Ptr {
+								labelItem = labelItem.Elem()
+							}
+							// Try to get ID from LabelDto
+							if labelIDField := labelItem.FieldByName("ID"); labelIDField.IsValid() {
+								labelIDs = append(labelIDs, fmt.Sprintf("%v", labelIDField.Interface()))
+							}
+						}
+					} else {
+						// Fallback to LabelIDs field
+						labelsField := resultVal.FieldByName("LabelIDs")
+						if labelsField.IsValid() && labelsField.Kind() == reflect.Slice {
+							for i := 0; i < labelsField.Len(); i++ {
+								labelIDs = append(labelIDs, fmt.Sprintf("%v", labelsField.Index(i).Interface()))
+							}
+						}
+					}
 				}
-			}
-
-			// Try to get Status field
-			statusField := val.FieldByName("Status")
-			if statusField.IsValid() {
-				status = fmt.Sprintf("%v", statusField.Interface())
-			}
-
-			// Try to get ClientID field - handle pointer to string case
-			clientField := val.FieldByName("ClientID")
-			if clientField.IsValid() {
-				if clientField.Kind() == reflect.Ptr && !clientField.IsNil() {
-					clientID = fmt.Sprintf("%v", clientField.Elem().Interface())
-				} else if clientField.Kind() != reflect.Ptr {
-					clientID = fmt.Sprintf("%v", clientField.Interface())
+			} else {
+				// No Result field, try to access fields directly (backward compatibility)
+				// Try to get ID field (case insensitive)
+				idField := val.FieldByName("ID")
+				if idField.IsValid() {
+					id = fmt.Sprintf("%v", idField.Interface())
 				}
-			}
 
-			// Try to get LabelIDs field
-			labelsField := val.FieldByName("LabelIDs")
-			if labelsField.IsValid() && labelsField.Kind() == reflect.Slice {
-				for i := 0; i < labelsField.Len(); i++ {
-					labelIDs = append(labelIDs, fmt.Sprintf("%v", labelsField.Index(i).Interface()))
+				// Try to get Name field - handle pointer to string case
+				nameField := val.FieldByName("Name")
+				if nameField.IsValid() {
+					if nameField.Kind() == reflect.Ptr && !nameField.IsNil() {
+						name = fmt.Sprintf("%v", nameField.Elem().Interface())
+					} else if nameField.Kind() != reflect.Ptr {
+						name = fmt.Sprintf("%v", nameField.Interface())
+					}
+				}
+
+				// Try to get Description field - handle pointer to string case
+				descField := val.FieldByName("Description")
+				if descField.IsValid() {
+					if descField.Kind() == reflect.Ptr && !descField.IsNil() {
+						description = fmt.Sprintf("%v", descField.Elem().Interface())
+					} else if descField.Kind() != reflect.Ptr {
+						description = fmt.Sprintf("%v", descField.Interface())
+					}
+				}
+
+				// Try to get Status field
+				statusField := val.FieldByName("Status")
+				if statusField.IsValid() {
+					status = fmt.Sprintf("%v", statusField.Interface())
+				}
+
+				// Try to get ClientID field - handle pointer to string case
+				clientField := val.FieldByName("ClientID")
+				if clientField.IsValid() {
+					if clientField.Kind() == reflect.Ptr && !clientField.IsNil() {
+						clientID = fmt.Sprintf("%v", clientField.Elem().Interface())
+					} else if clientField.Kind() != reflect.Ptr {
+						clientID = fmt.Sprintf("%v", clientField.Interface())
+					}
+				}
+
+				// Try to get LabelIDs field
+				labelsField := val.FieldByName("LabelIDs")
+				if labelsField.IsValid() && labelsField.Kind() == reflect.Slice {
+					for i := 0; i < labelsField.Len(); i++ {
+						labelIDs = append(labelIDs, fmt.Sprintf("%v", labelsField.Index(i).Interface()))
+					}
 				}
 			}
 		}
@@ -768,13 +850,59 @@ func PrintFindingTable(finding interface{}, verboseLevel int) error {
 		val = val.Elem()
 	}
 
+	// Unwrap AjaxResponse: if this is a wrapper with Result (e.g. FindingDtoAjaxResponse), use Result as the finding
+	if resultField := val.FieldByName("Result"); resultField.IsValid() && resultField.Kind() == reflect.Ptr && !resultField.IsNil() {
+		val = resultField.Elem()
+	}
+
 	// Extract finding fields
 	var id, name, description, projectID string
 	var severity, status int
 
+	// Helper to get string from a reflect Value (handles *string and string)
+	getString := func(f reflect.Value) string {
+		if !f.IsValid() {
+			return ""
+		}
+		if f.Kind() == reflect.Ptr {
+			if f.IsNil() {
+				return ""
+			}
+			f = f.Elem()
+		}
+		if f.Kind() == reflect.String {
+			return f.String()
+		}
+		return ""
+	}
+
+	// Helper to get int from a reflect Value (handles *int types and enums)
+	getInt := func(f reflect.Value) int {
+		if !f.IsValid() {
+			return 0
+		}
+		if f.Kind() == reflect.Ptr {
+			if f.IsNil() {
+				return 0
+			}
+			f = f.Elem()
+		}
+		switch f.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return int(f.Int())
+		case reflect.Float64, reflect.Float32:
+			return int(f.Float())
+		}
+		return 0
+	}
+
 	// Handle both map[string]interface{} and struct cases
 	switch findingVal := finding.(type) {
 	case map[string]interface{}:
+		// If map has nested "result", use that as the finding data
+		if resultObj, ok := findingVal["result"].(map[string]interface{}); ok {
+			findingVal = resultObj
+		}
 		if v, ok := findingVal["id"]; ok {
 			id = fmt.Sprintf("%v", v)
 		}
@@ -802,25 +930,13 @@ func PrintFindingTable(finding interface{}, verboseLevel int) error {
 			projectID = fmt.Sprintf("%v", v)
 		}
 	default:
-		// Try to access struct fields
-		if idField := val.FieldByName("ID"); idField.IsValid() {
-			id = idField.String()
-		}
-		if nameField := val.FieldByName("Name"); nameField.IsValid() {
-			name = nameField.String()
-		}
-		if descField := val.FieldByName("Description"); descField.IsValid() {
-			description = descField.String()
-		}
-		if severityField := val.FieldByName("Severity"); severityField.IsValid() {
-			severity = int(severityField.Int())
-		}
-		if statusField := val.FieldByName("Status"); statusField.IsValid() {
-			status = int(statusField.Int())
-		}
-		if projectIDField := val.FieldByName("ProjectID"); projectIDField.IsValid() {
-			projectID = projectIDField.String()
-		}
+		// Try to access struct fields (val may be unwrapped Result)
+		id = getString(val.FieldByName("ID"))
+		name = getString(val.FieldByName("Name"))
+		description = getString(val.FieldByName("Description"))
+		severity = getInt(val.FieldByName("Severity"))
+		status = getInt(val.FieldByName("Status"))
+		projectID = getString(val.FieldByName("ProjectID"))
 	}
 
 	if id == "" {

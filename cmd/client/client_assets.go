@@ -35,7 +35,7 @@ var getAssetsCmd = &cobra.Command{
 				return
 			}
 
-			assets, err := client.ClientOps.GetAssets(maxResultCount, skipCount, filter)
+			assets, err := client.ClientOps.ApiV22ClientAssetsGet(maxResultCount, skipCount, filter)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -124,7 +124,7 @@ var createAssetCmd = &cobra.Command{
 				return
 			}
 
-			result, err := client.ClientOps.CreateAsset(body)
+			result, err := client.ClientOps.ApiV22ClientAssetsPost(body)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -161,7 +161,7 @@ var deleteAssetCmd = &cobra.Command{
 				return
 			}
 
-			result, err := client.ClientOps.DeleteAsset(assetID)
+			result, err := client.ClientOps.ApiV22ClientAssetsByIdDelete(assetID)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -211,7 +211,7 @@ var updateAssetCmd = &cobra.Command{
 				return
 			}
 
-			err := client.ClientOps.UpdateAsset(assetID, body)
+			err := client.ClientOps.ApiV22ClientAssetsByIdPut(assetID, body)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return

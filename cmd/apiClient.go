@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/yourusername/cyverApiCli/internal/api"
 	"github.com/yourusername/cyverApiCli/internal/api/versions"
 	"github.com/yourusername/cyverApiCli/internal/api/versions/v2_2"
 	log "github.com/yourusername/cyverApiCli/logger"
@@ -96,7 +97,7 @@ func DirectHTTPRequest(method, urlPath, data string) (*CustomURLResponse, error)
 
 	// Add headers
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "cyverApiCli/1.0")
+	req.Header.Set("User-Agent", api.ChromeUserAgent)
 
 	// Check for access token in config first (prioritize token over API key)
 	accessToken := viper.GetString("token.access_token")

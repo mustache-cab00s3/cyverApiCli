@@ -46,7 +46,7 @@ var getProjectsCmd = &cobra.Command{
 				return
 			}
 
-			projects, err := client.ClientOps.GetProjects(status, maxResultCount, skipCount, filter)
+			projects, err := client.ClientOps.ApiV22ClientProjectsGet(status, maxResultCount, skipCount, filter)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -124,7 +124,7 @@ var getProjectByIDCmd = &cobra.Command{
 				return
 			}
 
-			project, err := client.ClientOps.GetProjectByID(projectID)
+			project, err := client.ClientOps.ApiV22ClientProjectsByIdGet(projectID)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -199,7 +199,7 @@ var getProjectRequestFormsCmd = &cobra.Command{
 				return
 			}
 
-			requestForms, err := client.ClientOps.GetProjectRequestForms(maxResultCount, skipCount, filter)
+			requestForms, err := client.ClientOps.ApiV22ClientProjectsRequestFormsGet(maxResultCount, skipCount, filter)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -289,7 +289,7 @@ var requestProjectCmd = &cobra.Command{
 				return
 			}
 
-			result, err := client.ClientOps.RequestProject(triggerEvents, body)
+			result, err := client.ClientOps.ApiV22ClientProjectsRequestPost(triggerEvents, body)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return

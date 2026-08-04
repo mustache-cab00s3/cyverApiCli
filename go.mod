@@ -1,4 +1,4 @@
-module github.com/yourusername/cyverApiCli
+module github.com/Cab00se-AS/cyverApiCli
 
 go 1.23.0
 

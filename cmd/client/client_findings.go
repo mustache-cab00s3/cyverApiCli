@@ -35,7 +35,7 @@ var getFindingsCmd = &cobra.Command{
 				return
 			}
 
-			findings, err := client.ClientOps.GetFindings(projectID, maxResultCount, skipCount)
+			findings, err := client.ClientOps.ApiV22ClientFindingsGet(projectID, maxResultCount, skipCount)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -114,7 +114,7 @@ var getFindingByIDCmd = &cobra.Command{
 				return
 			}
 
-			finding, err := client.ClientOps.GetFindingByID(findingID, includeEvidence)
+			finding, err := client.ClientOps.ApiV22ClientFindingsByIdGet(findingID, includeEvidence)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -173,7 +173,7 @@ var setFindingStatusCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		findingID := args[0]
-		triggerEvents, _ := cmd.Flags().GetInt("trigger-events")
+		triggerEvents, _ := cmd.Flags().GetBool("trigger-events")
 		statusBodyJSON, _ := cmd.Flags().GetString("status-body")
 
 		if statusBodyJSON == "" {
@@ -202,7 +202,7 @@ var setFindingStatusCmd = &cobra.Command{
 				return
 			}
 
-			err := client.ClientOps.SetFindingStatus(findingID, triggerEvents, statusBody)
+			err := client.ClientOps.ApiV22ClientFindingsByIdPost(findingID, triggerEvents, statusBody)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -219,20 +219,20 @@ var setFindingStatusCmd = &cobra.Command{
 
 func init() {
 	// Add flags to get findings command
-	getFindingsCmd.Flags().String("project-id", "", "Filter by project ID")
-	getFindingsCmd.Flags().Int("max-results", 10, "Maximum number of results")
-	getFindingsCmd.Flags().Int("skip-count", 0, "Number of results to skip")
-	getFindingsCmd.Flags().String("output", "table", "Output format: json (complete JSON), short (ID and name JSON), table (ID and name table), or custom (interactive field selection)")
-	getFindingsCmd.Flags().Int("max-columns", 4, "Maximum number of columns for custom table output")
+	getFindingsCmd.Flags().StringP("project-id", "P", "", "Filter by project ID")
+	getFindingsCmd.Flags().IntP("max-results", "m", 10, "Maximum number of results")
+	getFindingsCmd.Flags().IntP("skip-count", "s", 0, "Number of results to skip")
+	getFindingsCmd.Flags().StringP("output", "o", "table", "Output format: json (complete JSON), short (ID and name JSON), table (ID and name table), or custom (interactive field selection)")
+	getFindingsCmd.Flags().IntP("max-columns", "C", 4, "Maximum number of columns for custom table output")
 
 	// Add flags to get finding by ID command
-	getFindingByIDCmd.Flags().Bool("include-evidence", false, "Include evidence in response")
-	getFindingByIDCmd.Flags().String("output", "table", "Output format: json (complete JSON), table (formatted table), or custom (interactive field selection)")
-	getFindingByIDCmd.Flags().Int("max-columns", 4, "Maximum number of columns for custom table output")
+	getFindingByIDCmd.Flags().BoolP("include-evidence", "e", false, "Include evidence in response")
+	getFindingByIDCmd.Flags().StringP("output", "o", "table", "Output format: json (complete JSON), table (formatted table), or custom (interactive field selection)")
+	getFindingByIDCmd.Flags().IntP("max-columns", "C", 4, "Maximum number of columns for custom table output")
 
 	// Add flags to set finding status command
-	setFindingStatusCmd.Flags().Int("trigger-events", 0, "Trigger events flag")
-	setFindingStatusCmd.Flags().String("status-body", "", "JSON body for status update (required)")
+	setFindingStatusCmd.Flags().BoolP("trigger-events", "t", false, "Trigger events when updating status")
+	setFindingStatusCmd.Flags().StringP("status-body", "b", "", "JSON body for status update (required)")
 
 	// Commands will be added to findings command group via InitClientCommands
 }

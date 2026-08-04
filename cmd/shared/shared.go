@@ -1,7 +1,12 @@
 package shared
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/spf13/viper"
+	"github.com/yourusername/cyverApiCli/internal/api"
+	"github.com/yourusername/cyverApiCli/internal/api/services"
 	"github.com/yourusername/cyverApiCli/internal/api/versions"
 	"github.com/yourusername/cyverApiCli/internal/api/versions/v2_2"
 	"github.com/yourusername/cyverApiCli/internal/errors"
@@ -61,8 +66,10 @@ func CreateVersionedApiClient(apiKey, baseURL, apiVersionString string) (interfa
 			log.GetLogger(VerboseLevel).Error("API client for version 'v2.2' is not of expected type *v2_2.Client. Got", "genericClient", genericClient)
 			return nil, errors.NewCyverError(errors.ErrCodeUnexpectedType, "API client type mismatch", nil)
 		}
-		// Set the verbose level for the v2.2 client
+		// Set the verbose level for the v2.2 client and base API client
 		v2_2.SetVerboseLevel(VerboseLevel)
+		// Also set verbosity for the base API client
+		api.SetVerboseLevel(VerboseLevel)
 		return v2_2Client, nil
 	default:
 		log.GetLogger(VerboseLevel).Error("Unsupported API version", "Supported Version", "v2.2, latest", "apiVersionString", apiVersionString)
@@ -191,7 +198,31 @@ func GetVersionedApiClient() interface{} {
 		LogError("Error: failed to create versioned API client", "error", err)
 		return nil
 	}
+	
+	// Ensure verbosity is set on the client (in case it was created before verbosity was set)
+	api.SetVerboseLevel(VerboseLevel)
+	v2_2.SetVerboseLevel(VerboseLevel)
+	
 	return client
+}
+
+// NewNonSupportedServiceClient returns a client for non-documented /api/services (and related) endpoints
+// using the global config loader and viper token/timeout.
+func NewNonSupportedServiceClient() (*services.NonSupportedServiceClient, error) {
+	if configLoader == nil {
+		return nil, fmt.Errorf("config loader not set")
+	}
+	_, baseURL, _, err := configLoader.LoadConfig()
+	if err != nil {
+		return nil, err
+	}
+	timeoutSeconds := viper.GetInt("client.timeout")
+	if timeoutSeconds <= 0 {
+		timeoutSeconds = 30
+	}
+	client := services.NewNonSupportedServiceClient(baseURL, time.Duration(timeoutSeconds)*time.Second)
+	client.Token = viper.GetString("token.access_token")
+	return client, nil
 }
 
 // GetLogger returns a logger with the current verbose level

@@ -1,0 +1,45 @@
+{
+  "name": "SQL Injection in Search Parameter",
+  "code": "FIND-2025-001",
+  "description": "The search endpoint reflects user input into a SQL query without parameterization.",
+  "type": 1,
+  "status": 1,
+  "severity": 3,
+  "recommendation": "Use parameterized queries or an ORM; validate and encode all inputs.",
+  "backgroundInformation": "Discovered during authenticated testing of the reporting module.",
+  "impact": 4,
+  "impactDescription": "Full read access to the application database.",
+  "likelihood": 3,
+  "likelihoodDescription": "Exploitable with a normal user account.",
+  "complianceStatus": 1,
+  "complianceComment": "Maps to OWASP A03:2021 – Injection.",
+  "cweList": ["CWE-89"],
+  "cveList": [],
+  "mitreAttackTacticsList": ["TA0007"],
+  "mitreAttackTechniquesList": ["T1190"],
+  "mitreAttackMitigationsList": ["M1050"],
+  "vulnerabilityTypeList": ["SQLInjection"],
+  "assetIdList": [],
+  "labelIdList": [],
+  "cvss": {
+    "cvss31Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+    "cvss31Score": 8.1
+  },
+  "findingEvidenceList": [
+    {
+      "title": "SQL error screenshot showing exception",
+      "location": "GET /api/reports/search?q=test%27",
+      "version": "1.0.0",
+      "reproduce": "1. Authenticate to the app.\n2. Navigate to Reports search.\n3. Submit test' in q parameter.\n4. Observe SQL exception in response.",
+      "results": "SQL exception text is reflected in response body.",
+      "issueDetails": "Unhandled database exception reveals schema information.",
+      "isVisibleInReport": true,
+      "ip": "192.168.1.100",
+      "hostname": "app-server",
+      "port": "443",
+      "protocol": "HTTPS",
+      "evidenceComplianceStatus": 1,
+      "files": ["SqlInjection.png"]
+    }
+  ]
+}

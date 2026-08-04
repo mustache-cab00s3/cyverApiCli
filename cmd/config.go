@@ -33,7 +33,7 @@ var configCmd = &cobra.Command{
 var initConfigCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize CLI configuration",
-	Long:  `Create a new configuration file with guided setup.`,
+	Long:  `Create or extend the configuration file. If the file already exists, you can overwrite it, add a named profile without losing other settings, or cancel. You can store credentials under named profiles (AWS-style) and set current_profile.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := initializeConfig(); err != nil {
 			fmt.Printf("Error initializing config: %v\n", err)
@@ -79,11 +79,75 @@ var reAuthCmd = &cobra.Command{
 	},
 }
 
+var profileCmd = &cobra.Command{
+	Use:     "profile",
+	Aliases: []string{"instance"},
+	Short:   "List or select named configuration profiles",
+	Long: `Named profiles (similar to AWS ~/.aws/config) keep separate api, auth, and token data per profile.
+
+Use the "profiles" map in YAML (legacy "instances" is still read). The default profile name is stored in current_profile.
+Set the default with "config profile use <name>", override per command with --profile / -p, or set CYVER_PROFILE.`,
+}
+
+var profileListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List configured profile names",
+	Run: func(cmd *cobra.Command, args []string) {
+		aliases := ListProfileNames()
+		if len(aliases) == 0 {
+			fmt.Println("No profiles configured. Add a \"profiles\" map to your config file (each key is a profile name).")
+			return
+		}
+		def := EffectiveCurrentProfileName()
+		fmt.Println("Configured profiles:")
+		for _, a := range aliases {
+			mark := ""
+			if def != "" && a == def {
+				mark = " (default)"
+			}
+			fmt.Printf("  %s%s\n", a, mark)
+		}
+	},
+}
+
+var profileUseCmd = &cobra.Command{
+	Use:   "use PROFILE",
+	Short: "Set the default profile (saved as current_profile)",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		alias := args[0]
+		if !profileExists(alias) {
+			fmt.Printf("Unknown profile %q. Run \"cyverApiCli config profile list\" to see names.\n", alias)
+			os.Exit(1)
+		}
+		viper.Set("current_profile", alias)
+		viper.Set("current_instance", "")
+		configPath := viper.ConfigFileUsed()
+		if configPath == "" {
+			home, err := os.UserHomeDir()
+			if err != nil {
+				fmt.Printf("Error resolving config path: %v\n", err)
+				os.Exit(1)
+			}
+			configPath = filepath.Join(home, ".cyverApiCli.yaml")
+			viper.SetConfigFile(configPath)
+		}
+		if err := viper.WriteConfig(); err != nil {
+			fmt.Printf("Error saving config: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("Default profile set to %q (current_profile).\n", alias)
+	},
+}
+
 func init() {
 	configCmd.AddCommand(initConfigCmd)
 	configCmd.AddCommand(viewConfigCmd)
 	configCmd.AddCommand(refreshTokenCmd)
 	configCmd.AddCommand(reAuthCmd)
+	configCmd.AddCommand(profileCmd)
+	profileCmd.AddCommand(profileListCmd)
+	profileCmd.AddCommand(profileUseCmd)
 	rootCmd.AddCommand(configCmd)
 }
 
@@ -140,6 +204,255 @@ func validateAPIVersion(version string) bool {
 	return validVersions[version]
 }
 
+// validateProfileName checks a safe profile name (like AWS [profile name]: letters, digits, hyphens, underscores).
+func validateProfileName(s string) bool {
+	if len(s) < 1 || len(s) > 40 {
+		return false
+	}
+	for _, r := range s {
+		switch {
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
+		case r == '-' || r == '_':
+		default:
+			return false
+		}
+	}
+	return true
+}
+
+// promptNamedProfile asks whether to use named profiles (AWS-style) and returns the chosen name.
+func promptNamedProfile() (named bool, name string) {
+	var useStr string
+	fmt.Println("\nNamed profile (AWS-style)")
+	fmt.Println("-------------------------")
+	fmt.Println("Named profiles keep separate API URLs and tokens (like [default] and [profile dev-user] in AWS config).")
+	fmt.Println("You can add more profiles later by editing the config file or running config init again.")
+	for {
+		fmt.Print("\nStore this API connection under a named profile? (y/N): ")
+		fmt.Scanln(&useStr)
+		if useStr == "" || useStr == "n" || useStr == "N" {
+			return false, ""
+		}
+		if useStr == "y" || useStr == "Y" {
+			break
+		}
+		fmt.Println("Please answer 'y' or 'n'")
+	}
+	for {
+		fmt.Print("Profile name [default]: ")
+		fmt.Scanln(&name)
+		if name == "" {
+			name = "default"
+		}
+		if validateProfileName(name) {
+			return true, name
+		}
+		fmt.Println("Invalid name. Use 1–40 characters: letters, digits, hyphens, underscores.")
+	}
+}
+
+// applyProfileLayout sets top-level api and, when named, current_profile and profiles.<name>.api.
+func applyProfileLayout(config map[string]interface{}, named bool, name string, apiBlock map[string]interface{}) {
+	config["api"] = apiBlock
+	if !named || name == "" {
+		return
+	}
+	config["current_profile"] = name
+	config["profiles"] = map[string]interface{}{
+		name: map[string]interface{}{
+			"api": apiBlock,
+		},
+	}
+}
+
+// clearProfileKeysIfFlatProfile removes profiles/instances and current_* keys when saving a flat single-profile config.
+func clearProfileKeysIfFlatProfile(named bool) {
+	if named {
+		return
+	}
+	viper.Set("profiles", map[string]interface{}{})
+	viper.Set("instances", map[string]interface{}{})
+	viper.Set("current_profile", "")
+	viper.Set("current_instance", "")
+}
+
+// collectCoreAPISettings prompts for API version, base URL, and optional API key (shared by full init and add-profile).
+func collectCoreAPISettings() (apiVersion, baseURL, apiKey string) {
+	fmt.Println("\nCyver API Configuration")
+	fmt.Println("======================")
+
+	for {
+		fmt.Print("\nSelect API version (v2.2/latest) [latest]: ")
+		fmt.Scanln(&apiVersion)
+		if apiVersion == "" {
+			apiVersion = "latest"
+		}
+		if validateAPIVersion(apiVersion) {
+			break
+		}
+		fmt.Println("Invalid API version. Please select from: v2.2, latest")
+	}
+
+	for {
+		fmt.Print("\nEnter API base URL [https://api.cyver.io]: ")
+		fmt.Scanln(&baseURL)
+		if baseURL == "" {
+			baseURL = "https://api.cyver.io"
+		}
+		if validateURL(baseURL) {
+			break
+		}
+		fmt.Println("Invalid URL. Please enter a valid URL starting with http:// or https://")
+	}
+
+	for {
+		fmt.Print("\nEnter your API key (optional, press Enter to skip): ")
+		fmt.Scanln(&apiKey)
+		if apiKey == "" || validateAPIKey(apiKey) {
+			break
+		}
+		fmt.Println("Invalid API key. API key must be at least 32 characters long.")
+	}
+	return apiVersion, baseURL, apiKey
+}
+
+// promptNewProfileNameForAdd asks for a profile name; if it already exists, offers to replace the API block only.
+func promptNewProfileNameForAdd() string {
+	for {
+		fmt.Print("\nProfile name (letters, digits, hyphens, underscores) [dev-user]: ")
+		var name string
+		fmt.Scanln(&name)
+		if name == "" {
+			name = "dev-user"
+		}
+		if !validateProfileName(name) {
+			fmt.Println("Invalid name. Use 1–40 characters: letters, digits, hyphens, underscores.")
+			continue
+		}
+		if profileExists(name) {
+			fmt.Printf("Profile %q already exists. Replace its stored API settings (auth/token are kept unless you edit the file)? (y/N): ", name)
+			var r string
+			fmt.Scanln(&r)
+			if r != "y" && r != "Y" {
+				continue
+			}
+		}
+		return name
+	}
+}
+
+// initializeConfigAddProfile merges a new or updated profile into the existing YAML without wiping other keys.
+func initializeConfigAddProfile(configPath string) error {
+	viper.SetConfigFile(configPath)
+	if err := viper.ReadInConfig(); err != nil {
+		return fmt.Errorf("read existing config: %w", err)
+	}
+
+	fmt.Println("\nAdd or update a profile")
+	fmt.Println("-------------------------")
+	fmt.Println("Global settings (proxy, logging, output, client timeout) are unchanged. You can edit them with \"cyverApiCli config update\".")
+
+	profileName := promptNewProfileNameForAdd()
+	apiVersion, baseURL, apiKey := collectCoreAPISettings()
+
+	apiBlock := map[string]interface{}{
+		"version":  apiVersion,
+		"base_url": baseURL,
+		"api_key":  apiKey,
+	}
+
+	var setDefault string
+	for {
+		fmt.Print("\nSet this profile as the default (current_profile)? (y/N): ")
+		fmt.Scanln(&setDefault)
+		if setDefault == "" || setDefault == "n" || setDefault == "N" {
+			setDefault = "n"
+			break
+		}
+		if setDefault == "y" || setDefault == "Y" {
+			setDefault = "y"
+			break
+		}
+		fmt.Println("Please answer 'y' or 'n'")
+	}
+
+	rootKey := MergeProfileStorageRootForWrite()
+	existing := toStringMap(viper.Get(rootKey))
+	if existing == nil {
+		existing = map[string]interface{}{}
+	}
+
+	prev := toStringMap(existing[profileName])
+	entry := map[string]interface{}{"api": apiBlock}
+	if prev != nil {
+		if a, ok := prev["auth"]; ok {
+			entry["auth"] = a
+		}
+		if t, ok := prev["token"]; ok {
+			entry["token"] = t
+		}
+	}
+	existing[profileName] = entry
+	viper.Set(rootKey, existing)
+
+	activeProfileResolved = profileName
+	if err := ApplyProfile(profileName); err != nil {
+		return fmt.Errorf("apply profile: %w", err)
+	}
+	if setDefault == "y" {
+		viper.Set("current_profile", profileName)
+		viper.Set("current_instance", "")
+	}
+
+	if err := viper.WriteConfig(); err != nil {
+		return fmt.Errorf("failed to write config file: %w", err)
+	}
+	if err := os.Chmod(configPath, 0600); err != nil {
+		return fmt.Errorf("failed to set config file permissions: %w", err)
+	}
+
+	fmt.Printf("\nProfile %q saved under %q in %s\n", profileName, rootKey, configPath)
+	if setDefault == "y" {
+		fmt.Println("This profile is now the default (current_profile).")
+	} else {
+		fmt.Printf("Default profile is unchanged. Use: cyverApiCli --profile %s ... or: cyverApiCli config profile use %s\n", profileName, profileName)
+	}
+	fmt.Println("\nYou can now use the CLI with your configured settings.")
+	fmt.Println("To view your current configuration, use 'cyverApiCli config view'")
+
+	runInteractiveTokenAuthIfNoAPIKey(apiKey, "\nNo API key provided for this profile. Starting token authentication...")
+
+	return nil
+}
+
+// runInteractiveTokenAuthIfNoAPIKey prompts for username and runs token authentication when init completed without an API key.
+func runInteractiveTokenAuthIfNoAPIKey(apiKey, introLine string) {
+	if apiKey != "" {
+		return
+	}
+	fmt.Println(introLine)
+	var username string
+	for {
+		fmt.Print("Enter your username or email address: ")
+		fmt.Scanln(&username)
+		if validateUsername(username) {
+			break
+		}
+		fmt.Println("Please enter a valid username (3-50 characters, alphanumeric with dots, underscores, hyphens) or email address.")
+	}
+	SetAuthViperKey("email", username)
+	tempCmd := &cobra.Command{}
+	tempCmd.Flags().String("username", username, "")
+	if err := handleClientSwitch(versionedApiClient(), tempCmd); err != nil {
+		fmt.Printf("Token authentication failed: %v\n", err)
+		fmt.Println("You can manually run 'cyverApiCli apiAuth getToken -u <username>' to authenticate later.")
+	} else {
+		fmt.Println("Token authentication completed successfully!")
+	}
+}
+
 func initializeConfig() error {
 	// Get user's home directory
 	home, err := os.UserHomeDir()
@@ -153,56 +466,31 @@ func initializeConfig() error {
 	// Check if config already exists
 	if _, err := os.Stat(configPath); err == nil {
 		fmt.Printf("Configuration file already exists at %s\n", configPath)
-		fmt.Print("Do you want to overwrite it? (y/N): ")
+		fmt.Println("Choose how to proceed:")
+		fmt.Println("  O — Overwrite the entire file (full guided setup; replaces all settings)")
+		fmt.Println("  A — Add or replace one named profile (keeps proxy, logging, and other profiles)")
+		fmt.Println("  C — Cancel")
+		fmt.Print("Your choice [C]: ")
 		var response string
 		fmt.Scanln(&response)
-		if response != "y" && response != "Y" {
+		response = strings.TrimSpace(strings.ToUpper(response))
+		if response == "A" {
+			return initializeConfigAddProfile(configPath)
+		}
+		if response != "O" && response != "Y" {
 			fmt.Println("Configuration initialization cancelled.")
 			return nil
 		}
 	}
 
-	// Get API configuration
-	fmt.Println("\nCyver API Configuration")
-	fmt.Println("======================")
+	apiVersion, baseURL, apiKey := collectCoreAPISettings()
 
-	// Get API version
-	var apiVersion string
-	for {
-		fmt.Print("\nSelect API version (v2.2/latest) [latest]: ")
-		fmt.Scanln(&apiVersion)
-		if apiVersion == "" {
-			apiVersion = "latest"
-		}
-		if validateAPIVersion(apiVersion) {
-			break
-		}
-		fmt.Println("Invalid API version. Please select from: v2.2, latest")
-	}
+	useNamed, profileName := promptNamedProfile()
 
-	// Get base URL
-	var baseURL string
-	for {
-		fmt.Print("\nEnter API base URL [https://api.cyver.io]: ")
-		fmt.Scanln(&baseURL)
-		if baseURL == "" {
-			baseURL = "https://api.cyver.io"
-		}
-		if validateURL(baseURL) {
-			break
-		}
-		fmt.Println("Invalid URL. Please enter a valid URL starting with http:// or https://")
-	}
-
-	// Get API key (optional)
-	var apiKey string
-	for {
-		fmt.Print("\nEnter your API key (optional, press Enter to skip): ")
-		fmt.Scanln(&apiKey)
-		if apiKey == "" || validateAPIKey(apiKey) {
-			break
-		}
-		fmt.Println("Invalid API key. API key must be at least 32 characters long.")
+	apiBlock := map[string]interface{}{
+		"version":  apiVersion,
+		"base_url": baseURL,
+		"api_key":  apiKey,
 	}
 
 	// Get proxy settings
@@ -288,11 +576,6 @@ func initializeConfig() error {
 			}
 
 			config := map[string]interface{}{
-				"api": map[string]interface{}{
-					"version":  apiVersion,
-					"base_url": baseURL,
-					"api_key":  apiKey,
-				},
 				"proxy": map[string]interface{}{
 					"url":      proxyURL,
 					"username": proxyUser,
@@ -310,6 +593,7 @@ func initializeConfig() error {
 					"color":  colorOutput == "y" || colorOutput == "Y",
 				},
 			}
+			applyProfileLayout(config, useNamed, profileName, apiBlock)
 
 			// Get client settings
 			fmt.Println("\nClient Settings")
@@ -334,8 +618,12 @@ func initializeConfig() error {
 
 			// Write config to file
 			viper.SetConfigFile(configPath)
+			clearProfileKeysIfFlatProfile(useNamed)
 			for key, value := range config {
 				viper.Set(key, value)
+			}
+			if useNamed {
+				activeProfileResolved = profileName
 			}
 			if err := viper.WriteConfig(); err != nil {
 				return fmt.Errorf("failed to write config file: %w", err)
@@ -347,10 +635,14 @@ func initializeConfig() error {
 			}
 
 			fmt.Printf("\nConfiguration saved to %s\n", configPath)
+			if useNamed {
+				fmt.Printf("Named profile %q is set as default (current_profile). Use \"cyverApiCli config profile list\" to see names.\n", profileName)
+			}
 			fmt.Println("\nYou can now use the CLI with your configured settings.")
 			fmt.Println("To modify these settings later, edit the config file or use 'cyverApiCli config init' again.")
 			fmt.Println("To view your current configuration, use 'cyverApiCli config view'")
 
+			runInteractiveTokenAuthIfNoAPIKey(apiKey, "\nNo API key provided. Starting token authentication process...")
 			return nil
 		}
 		fmt.Println("Please answer with 'y' or 'n'")
@@ -358,11 +650,6 @@ func initializeConfig() error {
 
 	// If no proxy configuration, write basic config
 	config := map[string]interface{}{
-		"api": map[string]interface{}{
-			"version":  apiVersion,
-			"base_url": baseURL,
-			"api_key":  apiKey,
-		},
 		"client": map[string]interface{}{
 			"timeout": 30,
 		},
@@ -375,11 +662,16 @@ func initializeConfig() error {
 			"color":  true,
 		},
 	}
+	applyProfileLayout(config, useNamed, profileName, apiBlock)
 
 	// Write config to file
 	viper.SetConfigFile(configPath)
+	clearProfileKeysIfFlatProfile(useNamed)
 	for key, value := range config {
 		viper.Set(key, value)
+	}
+	if useNamed {
+		activeProfileResolved = profileName
 	}
 	if err := viper.WriteConfig(); err != nil {
 		return fmt.Errorf("failed to write config file: %w", err)
@@ -391,40 +683,14 @@ func initializeConfig() error {
 	}
 
 	fmt.Printf("\nConfiguration saved to %s\n", configPath)
+	if useNamed {
+		fmt.Printf("Named profile %q is set as default (current_profile). Use \"cyverApiCli config profile list\" to see names.\n", profileName)
+	}
 	fmt.Println("\nYou can now use the CLI with your configured settings.")
 	fmt.Println("To modify these settings later, edit the config file or use 'cyverApiCli config init' again.")
 	fmt.Println("To view your current configuration, use 'cyverApiCli config view'")
 
-	// If API key is blank, trigger token authentication
-	if apiKey == "" {
-		fmt.Println("\nNo API key provided. Starting token authentication process...")
-
-		// Prompt for username
-		var username string
-		for {
-			fmt.Print("Enter your username or email address: ")
-			fmt.Scanln(&username)
-			if validateUsername(username) {
-				break
-			}
-			fmt.Println("Please enter a valid username (3-50 characters, alphanumeric with dots, underscores, hyphens) or email address.")
-		}
-
-		// Store email for future re-authentication
-		viper.Set("auth.email", username)
-
-		// Create a temporary command to execute tokenAuthCmd
-		tempCmd := &cobra.Command{}
-		tempCmd.Flags().String("username", username, "")
-
-		// Execute token authentication
-		if err := handleClientSwitch(versionedApiClient(), tempCmd); err != nil {
-			fmt.Printf("Token authentication failed: %v\n", err)
-			fmt.Println("You can manually run 'cyverApiCli apiAuth getToken -u <username>' to authenticate later.")
-		} else {
-			fmt.Println("Token authentication completed successfully!")
-		}
-	}
+	runInteractiveTokenAuthIfNoAPIKey(apiKey, "\nNo API key provided. Starting token authentication process...")
 
 	return nil
 }
@@ -486,6 +752,19 @@ func viewConfig() error {
 	// Get and display configuration
 	fmt.Println("\nCurrent Configuration:")
 	fmt.Println("=====================")
+
+	if aliases := ListProfileNames(); len(aliases) > 0 {
+		fmt.Println("\nProfiles (AWS-style):")
+		def := EffectiveCurrentProfileName()
+		if def == "" {
+			def = "(not set)"
+		}
+		fmt.Printf("  Default (current_profile / legacy current_instance): %s\n", def)
+		if a := ActiveProfileName(); a != "" {
+			fmt.Printf("  Active for this process: %s\n", a)
+		}
+		fmt.Printf("  Configured profile names: %s\n", strings.Join(aliases, ", "))
+	}
 
 	// API Configuration
 	fmt.Println("\nAPI Settings:")
@@ -825,12 +1104,12 @@ func RefreshAccessToken() error {
 	_ = viper.ReadInConfig() // ignore error, file may not exist yet
 
 	// Update token information in config
-	viper.Set("token.access_token", newTokenInfo.AccessToken)
-	viper.Set("token.refresh_token", newTokenInfo.RefreshToken)
-	viper.Set("token.expireInSeconds", newTokenInfo.ExpiresIn)
-	viper.Set("token.refresh_expires_in", newTokenInfo.RefreshExpiresIn)
-	viper.Set("token.token_created_at", newTokenInfo.TokenCreatedAt.Format(time.RFC3339))
-	viper.Set("token.refresh_token_created_at", newTokenInfo.RefreshTokenCreatedAt.Format(time.RFC3339))
+	SetTokenViperKey("access_token", newTokenInfo.AccessToken)
+	SetTokenViperKey("refresh_token", newTokenInfo.RefreshToken)
+	SetTokenViperKey("expireInSeconds", newTokenInfo.ExpiresIn)
+	SetTokenViperKey("refresh_expires_in", newTokenInfo.RefreshExpiresIn)
+	SetTokenViperKey("token_created_at", newTokenInfo.TokenCreatedAt.Format(time.RFC3339))
+	SetTokenViperKey("refresh_token_created_at", newTokenInfo.RefreshTokenCreatedAt.Format(time.RFC3339))
 
 	// Debug logging to verify what's being saved
 	log.GetLogger(verboseLevel).Debug("Saving token information to config",
@@ -952,17 +1231,16 @@ func ReAuthenticate() error {
 			return fmt.Errorf("authentication failed: %s", errorMsg)
 		}
 
-		// Check if 2FA is required
-		if response.Result == nil || response.Result.RequiresTwoFactorVerification {
+		if response.Result == nil {
+			return fmt.Errorf("empty response from authentication")
+		}
+
+		// MFA only when the API sets requiresTwoFactorVerification (password-only / sandbox skips this)
+		if response.Result.RequiresTwoFactorVerification {
 			log.GetLogger(verboseLevel).Info("Two-factor authentication required")
 
-			// Get user ID for 2FA request
-			userId := ""
-			if response.Result != nil && response.Result.UserId != "" {
-				userId = response.Result.UserId
-			} else {
-				// If no user ID in response, we need to get it another way
-				// For now, we'll prompt the user to enter it
+			userId := response.Result.UserId
+			if userId == "" {
 				fmt.Print("Enter your User ID for 2FA: ")
 				fmt.Scanln(&userId)
 				if userId == "" {
@@ -970,10 +1248,12 @@ func ReAuthenticate() error {
 				}
 			}
 
-			// Send 2FA code request
+			provider := twoFactorProviderForSend(response.Result.TwoFactorAuthProviders)
+			log.GetLogger(verboseLevel).Info("Using two-factor provider from API", "provider", provider)
+
 			twoFactorRequest := v2_2.SendTwoFactorAuthCodeModel{
 				UserId:   userId,
-				Provider: stringPtr("GoogleAuthenticator"), // Default to Google Authenticator
+				Provider: stringPtr(provider),
 			}
 
 			_, err = clientVersion.TokenAuthOps.ApiTokenauthSendtwofactorauthcodePost(twoFactorRequest)
@@ -1010,10 +1290,6 @@ func ReAuthenticate() error {
 			}
 		}
 
-		if response.Result == nil {
-			return fmt.Errorf("empty response from authentication")
-		}
-
 		// Update configuration with new token information
 		configPath := viper.ConfigFileUsed()
 		if configPath == "" {
@@ -1028,22 +1304,22 @@ func ReAuthenticate() error {
 		_ = viper.ReadInConfig() // ignore error, file may not exist yet
 
 		// Store email for future re-authentication
-		viper.Set("auth.email", storedEmail)
+		SetAuthViperKey("email", storedEmail)
 
 		// Handle pointer types safely and update token information
 		if response.Result.AccessToken != nil {
-			viper.Set("token.access_token", *response.Result.AccessToken)
+			SetTokenViperKey("access_token", *response.Result.AccessToken)
 		}
 		if response.Result.RefreshToken != nil {
-			viper.Set("token.refresh_token", *response.Result.RefreshToken)
+			SetTokenViperKey("refresh_token", *response.Result.RefreshToken)
 		}
-		viper.Set("token.expireInSeconds", response.Result.ExpireInSeconds)
-		viper.Set("token.refresh_expires_in", response.Result.RefreshTokenExpireInSeconds)
+		SetTokenViperKey("expireInSeconds", response.Result.ExpireInSeconds)
+		SetTokenViperKey("refresh_expires_in", response.Result.RefreshTokenExpireInSeconds)
 
 		// Set token creation timestamps
 		now := time.Now()
-		viper.Set("token.token_created_at", now.Format(time.RFC3339))
-		viper.Set("token.refresh_token_created_at", now.Format(time.RFC3339))
+		SetTokenViperKey("token_created_at", now.Format(time.RFC3339))
+		SetTokenViperKey("refresh_token_created_at", now.Format(time.RFC3339))
 
 		// Write updated config
 		if err := viper.WriteConfig(); err != nil {

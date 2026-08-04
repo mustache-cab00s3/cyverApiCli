@@ -19,6 +19,7 @@ type TokenAuthOps struct {
 	*Client
 }
 
+// Verified against Full_api.json on April 17, 2026
 func (c *TokenAuthOps) ApiTokenauthAuthenticatePost(body interface{}) (*AuthenticateResultModelAjaxResponse, error) {
 	getLogger().Debug("Starting ApiTokenauthAuthenticatePost request")
 
@@ -36,6 +37,7 @@ func (c *TokenAuthOps) ApiTokenauthAuthenticatePost(body interface{}) (*Authenti
 	return &response, nil
 }
 
+// Verified against Full_api.json on April 17, 2026
 // Get userId
 func (t *TokenAuthOps) GetUserId(authRequest AuthenticateModel) (*AuthenticateResultModel, error) {
 	getLogger().Debug("Starting GetUserId request", "userNameOrEmailAddress", authRequest.UserNameOrEmailAddress)
@@ -71,6 +73,7 @@ func (t *TokenAuthOps) GetUserId(authRequest AuthenticateModel) (*AuthenticateRe
 	return response.Result, nil
 }
 
+// Verified against Full_api.json on April 17, 2026
 func (c *TokenAuthOps) ApiTokenauthRefreshtokenPost(refreshToken string) (*RefreshTokenResultAjaxResponse, error) {
 	getLogger().Debug("Starting ApiTokenauthRefreshtokenPost request", "refreshTokenLength", len(refreshToken))
 
@@ -91,6 +94,7 @@ func (c *TokenAuthOps) ApiTokenauthRefreshtokenPost(refreshToken string) (*Refre
 	return &response, nil
 }
 
+// Verified against Full_api.json on April 17, 2026
 func (c *TokenAuthOps) ApiTokenauthSendtwofactorauthcodePost(body interface{}) (*interface{}, error) {
 	getLogger().Debug("Starting ApiTokenauthSendtwofactorauthcodePost request")
 

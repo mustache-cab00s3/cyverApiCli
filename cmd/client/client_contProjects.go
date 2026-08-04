@@ -36,7 +36,7 @@ var getContinuousProjectsCmd = &cobra.Command{
 				return
 			}
 
-			continuousProjects, err := client.ClientOps.GetContinuousProjects(status, maxResultCount, skipCount, filter)
+			continuousProjects, err := client.ClientOps.ApiV22ClientContinuousProjectsGet(status, maxResultCount, skipCount, filter)
 			if err != nil {
 				shared.HandleError(cmd, err)
 				return
@@ -114,7 +114,7 @@ var getContinuousProjectByIDCmd = &cobra.Command{
 				return
 			}
 
-			continuousProject, err := client.ClientOps.GetContinuousProjectByID(projectID)
+			continuousProject, err := client.ClientOps.ApiV22ClientContinuousProjectsByIdGet(projectID)
 			if err != nil {
 				shared.LogError("Error: failed to get continuous project", "error", err)
 				return
@@ -189,7 +189,7 @@ var getContinuousProjectRequestFormsCmd = &cobra.Command{
 				return
 			}
 
-			requestForms, err := client.ClientOps.GetContinuousProjectRequestForms(maxResultCount, skipCount, filter)
+			requestForms, err := client.ClientOps.ApiV22ClientContinuousProjectsRequestFormsGet(maxResultCount, skipCount, filter)
 			if err != nil {
 				shared.LogError("Error: failed to get continuous project request forms", "error", err)
 				return
@@ -279,7 +279,7 @@ var requestContinuousProjectCmd = &cobra.Command{
 				return
 			}
 
-			result, err := client.ClientOps.RequestContinuousProject(triggerEvents, body)
+			result, err := client.ClientOps.ApiV22ClientContinuousProjectsRequestPost(triggerEvents, body)
 			if err != nil {
 				shared.LogError("Error: failed to request continuous project", "error", err)
 				return

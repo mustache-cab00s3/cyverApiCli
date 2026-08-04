@@ -1,6 +1,6 @@
 package v2_2
 
-// This file contains Go structs generated from the models.json schema
+// This file contains Go structs generated from the Full_api.json schema
 // Generated structs for API v2.2 models
 // Verified structs: 120+ out of ~150+ total structs (verified against JSON schemas on September 26, 2025)
 // Updated with Misc.json structures on September 26, 2025
@@ -16,6 +16,7 @@ type AddressDto struct {
 	StateOrProvince *string `json:"stateOrProvince,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type AjaxResponse struct {
 	TargetUrl           *string     `json:"targetUrl,omitempty"`
 	Success             bool        `json:"success"`
@@ -25,6 +26,30 @@ type AjaxResponse struct {
 	Result              interface{} `json:"result,omitempty"`
 }
 
+// FileInfoDto matches Full_api.json FileInfoDto (upload-file response result / evidence file metadata).
+type FileInfoDto struct {
+	FileToken string `json:"fileToken"`
+	FileName  string `json:"fileName,omitempty"`
+	FileType  string `json:"fileType,omitempty"`
+	FileSize  int64  `json:"fileSize,omitempty"`
+}
+
+// FileInfoDtoAjaxResponse matches Full_api.json FileInfoDtoAjaxResponse.
+type FileInfoDtoAjaxResponse struct {
+	TargetUrl           *string      `json:"targetUrl,omitempty"`
+	Success             bool         `json:"success"`
+	Error               *ErrorInfo   `json:"error,omitempty"`
+	UnAuthorizedRequest bool         `json:"unAuthorizedRequest"`
+	Abp                 bool         `json:"__abp"`
+	Result              *FileInfoDto `json:"result,omitempty"`
+}
+
+// FileUploadResult is an alias retained for older call sites.
+type FileUploadResult = FileInfoDto
+
+// FileUploadResponse is an alias retained for older call sites.
+type FileUploadResponse = FileInfoDtoAjaxResponse
+
 // --- Enums ---
 
 type ApiRolesEnum int32
@@ -33,13 +58,15 @@ const (
 	ApiRolesEnum_Client_View_Only         ApiRolesEnum = 0
 	ApiRolesEnum_Client_Finding_Only      ApiRolesEnum = 1
 	ApiRolesEnum_Client_Project_Only      ApiRolesEnum = 2
-	ApiRolesEnum_Client                   ApiRolesEnum = 3
-	ApiRolesEnum_Pentester_View_Only      ApiRolesEnum = 4
-	ApiRolesEnum_Pentester_Project_Only   ApiRolesEnum = 5
-	ApiRolesEnum_Pentester_General        ApiRolesEnum = 6
-	ApiRolesEnum_Pentester_ProjectManager ApiRolesEnum = 7
-	ApiRolesEnum_Pentester_Manager        ApiRolesEnum = 8
-	ApiRolesEnum_Pentester_Owner          ApiRolesEnum = 9
+	ApiRolesEnum_Client_General           ApiRolesEnum = 3
+	ApiRolesEnum_Client                   ApiRolesEnum = 4
+	ApiRolesEnum_Pentester_View_Only      ApiRolesEnum = 5
+	ApiRolesEnum_Pentester_Project_Only   ApiRolesEnum = 6
+	ApiRolesEnum_Pentester_General        ApiRolesEnum = 7
+	ApiRolesEnum_Pentester_ProjectManager ApiRolesEnum = 8
+	ApiRolesEnum_Pentester_Manager        ApiRolesEnum = 9
+	ApiRolesEnum_Pentester_Owner          ApiRolesEnum = 10
+	ApiRolesEnum_Pentester_Team_Manager   ApiRolesEnum = 11
 )
 
 // Verified against Asset.json schema on September 26, 2025
@@ -162,6 +189,7 @@ type AssetDtoPagedResultDtoAjaxResponse struct {
 
 // --- Authentication Models ---
 
+// Verified against Full_api.json on April 17, 2026
 type AuthenticateModel struct {
 	UserNameOrEmailAddress       string  `json:"userNameOrEmailAddress"`
 	Password                     string  `json:"password"`
@@ -173,6 +201,7 @@ type AuthenticateModel struct {
 	CaptchaResponse              *string `json:"captchaResponse,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type AuthenticateResultModel struct {
 	AccessToken                   *string  `json:"accessToken,omitempty"`
 	EncryptedAccessToken          *string  `json:"encryptedAccessToken,omitempty"`
@@ -188,6 +217,7 @@ type AuthenticateResultModel struct {
 	RefreshTokenExpireInSeconds   int32    `json:"refreshTokenExpireInSeconds"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type AuthenticateResultModelAjaxResponse struct {
 	TargetUrl           *string                  `json:"targetUrl,omitempty"`
 	Success             bool                     `json:"success"`
@@ -199,6 +229,7 @@ type AuthenticateResultModelAjaxResponse struct {
 
 // --- Error Models ---
 
+// Verified against Full_api.json on April 17, 2026
 type ErrorInfo struct {
 	Code             int32                 `json:"code"`
 	Message          *string               `json:"message,omitempty"`
@@ -206,6 +237,7 @@ type ErrorInfo struct {
 	ValidationErrors []ValidationErrorInfo `json:"validationErrors,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ValidationErrorInfo struct {
 	Message *string  `json:"message,omitempty"`
 	Members []string `json:"members,omitempty"`
@@ -243,6 +275,7 @@ type ClientDto struct {
 	LabelList         []*LabelDto           `json:"labelList,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ClientDtoAjaxResponse struct {
 	TargetUrl           *string    `json:"targetUrl,omitempty"`
 	Success             bool       `json:"success"`
@@ -252,11 +285,13 @@ type ClientDtoAjaxResponse struct {
 	Result              *ClientDto `json:"result,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ClientDtoPagedResultDto struct {
 	Items      []*ClientDto `json:"items,omitempty"`
 	TotalCount int32        `json:"totalCount"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ClientDtoPagedResultDtoAjaxResponse struct {
 	TargetUrl           *string                  `json:"targetUrl,omitempty"`
 	Success             bool                     `json:"success"`
@@ -454,6 +489,7 @@ const (
 	ImportFileTypeEnum_Nipper                     ImportFileTypeEnum = 24
 	ImportFileTypeEnum_PentestToolsNetworkScanner ImportFileTypeEnum = 25
 	ImportFileTypeEnum_PentestToolsWebsiteScanner ImportFileTypeEnum = 26
+	ImportFileTypeEnum_Horizon                    ImportFileTypeEnum = 27
 )
 
 // Verified against Project.json schema on September 26, 2025
@@ -499,10 +535,11 @@ type ProjectDatesDtoV2 struct {
 	PlanningDates     []*PlanningDateDtoV2 `json:"planningDates,omitempty"`
 }
 
-// Verified against Project.json schema on September 26, 2025
+// Verified against Full_api.json on August 3, 2026
 type PlanningDateDtoV2 struct {
-	Date        string  `json:"date"`
-	Description *string `json:"description,omitempty"`
+	Status    *string `json:"status,omitempty"`
+	StartDate string  `json:"startDate"`
+	EndDate   string  `json:"endDate"`
 }
 
 // Verified against Project.json schema on September 26, 2025
@@ -1001,22 +1038,24 @@ type FindingCvssDto struct {
 type LabelTypeEnum int32
 
 const (
-	LabelTypeEnum_Project LabelTypeEnum = 0
-	LabelTypeEnum_Finding LabelTypeEnum = 1
-	LabelTypeEnum_Asset   LabelTypeEnum = 2
-	LabelTypeEnum_Client  LabelTypeEnum = 3
+	LabelTypeEnum_Finding LabelTypeEnum = 0
+	LabelTypeEnum_Client  LabelTypeEnum = 1
+	LabelTypeEnum_Project LabelTypeEnum = 2
+	LabelTypeEnum_Assets  LabelTypeEnum = 3
+	LabelTypeEnum_All     LabelTypeEnum = 4
 )
 
+// Verified against Full_api.json on April 17, 2026
 type LabelDto struct {
 	ID   string         `json:"id"`
 	Text *string        `json:"text,omitempty"`
 	Type *LabelTypeEnum `json:"type,omitempty"`
 }
 
-// Verified against Finding.json schema on September 26, 2025
+// Verified against Full_api.json on August 3, 2026
 type FindingEvidenceDto struct {
 	ID                       *string                   `json:"id,omitempty"`
-	Title                    string                    `json:"title"`
+	Title                    *string                   `json:"title,omitempty"`
 	Location                 *string                   `json:"location,omitempty"`
 	Version                  *string                   `json:"version,omitempty"`
 	Reproduce                *string                   `json:"reproduce,omitempty"`
@@ -1028,7 +1067,50 @@ type FindingEvidenceDto struct {
 	Port                     *string                   `json:"port,omitempty"`
 	Protocol                 *string                   `json:"protocol,omitempty"`
 	EvidenceComplianceStatus *FindingPciComplianceEnum `json:"evidenceComplianceStatus,omitempty"`
+	AssetID                  *string                   `json:"assetId,omitempty"`
+	EvidenceFiles            []*FileInfoDto            `json:"evidenceFiles,omitempty"`
 }
+
+// Verified against Full_api.json on August 3, 2026
+// CreateOrUpdateFindingEvidenceRequest is the request body for POST/PUT .../evidences.
+// evidenceFiles is an array of fileToken strings from upload-file.
+type CreateOrUpdateFindingEvidenceRequest struct {
+	Title                    string                    `json:"title"`
+	Location                 *string                   `json:"location,omitempty"`
+	Version                  *string                   `json:"version,omitempty"`
+	Reproduce                *string                   `json:"reproduce,omitempty"`
+	Results                  *string                   `json:"results,omitempty"`
+	IssueDetails             *string                   `json:"issueDetails,omitempty"`
+	IsVisibleInReport        bool                      `json:"isVisibleInReport"`
+	IP                       *string                   `json:"ip,omitempty"`
+	Hostname                 *string                   `json:"hostname,omitempty"`
+	Port                     *string                   `json:"port,omitempty"`
+	Protocol                 *string                   `json:"protocol,omitempty"`
+	AssetID                  *string                   `json:"assetId,omitempty"`
+	EvidenceComplianceStatus *FindingPciComplianceEnum `json:"evidenceComplianceStatus,omitempty"`
+	EvidenceFiles            []string                  `json:"evidenceFiles,omitempty"`
+}
+
+// FindingEvidenceDtoListResultDto matches Full_api.json.
+type FindingEvidenceDtoListResultDto struct {
+	Items []*FindingEvidenceDto `json:"items,omitempty"`
+}
+
+// FindingEvidenceDtoListResultDtoAjaxResponse matches Full_api.json.
+type FindingEvidenceDtoListResultDtoAjaxResponse struct {
+	TargetUrl           *string                           `json:"targetUrl,omitempty"`
+	Success             bool                              `json:"success"`
+	Error               *ErrorInfo                        `json:"error,omitempty"`
+	UnAuthorizedRequest bool                              `json:"unAuthorizedRequest"`
+	Abp                 bool                              `json:"__abp"`
+	Result              *FindingEvidenceDtoListResultDto  `json:"result,omitempty"`
+}
+
+// EvidenceFileDto is an alias for FileInfoDto (older naming).
+type EvidenceFileDto = FileInfoDto
+
+// CvssDto is an alias retained for older call sites; prefer FindingCvssDto.
+type CvssDto = FindingCvssDto
 
 // Verified against Finding.json schema on September 26, 2025
 type FindingRunDto struct {
@@ -1040,6 +1122,7 @@ type FindingRunDto struct {
 	Description          *string            `json:"description,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ExternalUrlDto struct {
 	Title *string `json:"title,omitempty"`
 	Link  *string `json:"link,omitempty"`
@@ -1048,17 +1131,18 @@ type ExternalUrlDto struct {
 type FormFieldTypeEnum int32
 
 const (
-	FormFieldTypeEnum_Text     FormFieldTypeEnum = 0
-	FormFieldTypeEnum_Number   FormFieldTypeEnum = 1
-	FormFieldTypeEnum_Date     FormFieldTypeEnum = 2
-	FormFieldTypeEnum_Select   FormFieldTypeEnum = 3
-	FormFieldTypeEnum_TextArea FormFieldTypeEnum = 4
+	FormFieldTypeEnum_Text        FormFieldTypeEnum = 1
+	FormFieldTypeEnum_Multitext   FormFieldTypeEnum = 2
+	FormFieldTypeEnum_Dropdown    FormFieldTypeEnum = 3
+	FormFieldTypeEnum_Multiselect FormFieldTypeEnum = 4
 )
 
+// Verified against Full_api.json on August 3, 2026
 type CustomFindingFieldAPIDto struct {
-	Field     *string            `json:"field,omitempty"`
+	Name      *string            `json:"name,omitempty"`
 	FieldType *FormFieldTypeEnum `json:"fieldType,omitempty"`
 	Value     *string            `json:"value,omitempty"`
+	Code      *string            `json:"code,omitempty"`
 }
 
 // Verified against Finding.json schema on September 26, 2025
@@ -1134,7 +1218,7 @@ type FindingDtoPagedResultDto struct {
 
 // Verified against Finding.json schema on September 26, 2025
 type FindingDtoPagedResultDtoAjaxResponse struct {
-	TargetUrl           *string                   `json:"targetUrl"`
+	TargetUrl           *string                   `json:"targetUrl,omitempty"`
 	Success             bool                      `json:"success"`
 	Error               *ErrorInfo                `json:"error,omitempty"`
 	UnAuthorizedRequest bool                      `json:"unAuthorizedRequest"`
@@ -1235,6 +1319,7 @@ type RequestProjectRequest struct {
 	FormData          []*RequestFormDataDto `json:"formData,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type CreateClientRequest struct {
 	Name        string      `json:"name"`
 	Description *string     `json:"description,omitempty"`
@@ -1243,6 +1328,7 @@ type CreateClientRequest struct {
 	Address     *AddressDto `json:"address,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type CreateProjectRequestV2 struct {
 	Name        string   `json:"name"`
 	Description *string  `json:"description,omitempty"`
@@ -1250,6 +1336,7 @@ type CreateProjectRequestV2 struct {
 	LabelIDs    []string `json:"labelIds,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type CreateOrUpdateAssetRequest struct {
 	Domain       *string                `json:"domain,omitempty"`
 	IP           *string                `json:"ip,omitempty"`
@@ -1277,12 +1364,37 @@ type CreateOrUpdateAssetRequest struct {
 	Environment  *AssetEnvironmentEnum  `json:"environment,omitempty"`
 }
 
+// Verified against Full_api.json on August 3, 2026
 type CreateOrUpdateFindingRequest struct {
-	Name        string               `json:"name"`
-	Description *string              `json:"description,omitempty"`
-	Severity    *FindingSeverityEnum `json:"severity,omitempty"`
-	Status      *FindingStatusEnum   `json:"status,omitempty"`
-	ProjectID   string               `json:"projectId"`
+	Code                       *string                          `json:"code,omitempty"`
+	Name                       *string                          `json:"name,omitempty"`
+	Description                *string                          `json:"description,omitempty"`
+	Type                       *FindingTypeEnum                 `json:"type,omitempty"`
+	Status                     *FindingStatusEnum               `json:"status,omitempty"`
+	Severity                   *FindingCriticalityEnum          `json:"severity,omitempty"`
+	ComplianceStatus           *FindingPciComplianceEnum        `json:"complianceStatus,omitempty"`
+	ComplianceComment          *string                          `json:"complianceComment,omitempty"`
+	Impact                     *int32                           `json:"impact,omitempty"`
+	ImpactDescription          *string                          `json:"impactDescription,omitempty"`
+	Likelihood                 *int32                           `json:"likelihood,omitempty"`
+	LikelihoodDescription      *string                          `json:"likelihoodDescription,omitempty"`
+	Recommendation             *string                          `json:"recommendation,omitempty"`
+	BackgroundInformation      *string                          `json:"backgroundInformation,omitempty"`
+	Cvss                       *FindingCvssDto                  `json:"cvss,omitempty"`
+	ProjectTaskID              *string                          `json:"projectTaskId,omitempty"`
+	ReviewerID                 *string                          `json:"reviewerId,omitempty"`
+	CweList                    []string                         `json:"cweList,omitempty"`
+	CveList                    []string                         `json:"cveList,omitempty"`
+	MitreAttackTacticsList     []string                         `json:"mitreAttackTacticsList,omitempty"`
+	MitreAttackTechniquesList  []string                         `json:"mitreAttackTechniquesList,omitempty"`
+	MitreAttackMitigationsList []string                         `json:"mitreAttackMitigationsList,omitempty"`
+	VulnerabilityTypeList      []string                         `json:"vulnerabilityTypeList,omitempty"`
+	ExternalUrlList            []*ExternalUrlDto                `json:"externalUrlList,omitempty"`
+	AssetIdList                []string                         `json:"assetIdList,omitempty"`
+	LabelIdList                []string                         `json:"labelIdList,omitempty"`
+	ProjectControlIdList       []string                         `json:"projectControlIdList,omitempty"`
+	FindingEvidenceList        []*FindingEvidenceDto            `json:"findingEvidenceList,omitempty"`
+	CustomFields               []*CustomFindingFieldAPIDto      `json:"customFields,omitempty"`
 }
 
 // Verified against Misc.json schema on September 26, 2025
@@ -1317,7 +1429,7 @@ type CreateUserRequest struct {
 }
 
 // Verified against Misc.json schema on September 26, 2025
-type CreatClientUserRequest struct {
+type CreateClientUserRequest struct {
 	Name               string        `json:"name"`
 	Surname            string        `json:"surname"`
 	EmailAddress       string        `json:"emailAddress"`
@@ -1349,6 +1461,7 @@ type UpdateContinuousProjectStatusRequest struct {
 
 // --- Response Models ---
 
+// Verified against Full_api.json on April 17, 2026
 type GuidAjaxResponse struct {
 	TargetUrl           *string    `json:"targetUrl,omitempty"`
 	Success             bool       `json:"success"`
@@ -1358,6 +1471,7 @@ type GuidAjaxResponse struct {
 	Result              *string    `json:"result,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type Int32AjaxResponse struct {
 	TargetUrl           *string    `json:"targetUrl,omitempty"`
 	Success             bool       `json:"success"`
@@ -1369,6 +1483,7 @@ type Int32AjaxResponse struct {
 
 // --- Token Models ---
 
+// Verified against Full_api.json on April 17, 2026
 type RefreshTokenResult struct {
 	AccessToken     *string `json:"accessToken,omitempty"`
 	RefreshToken    *string `json:"refreshToken,omitempty"`
@@ -1376,6 +1491,7 @@ type RefreshTokenResult struct {
 	TokenType       *string `json:"tokenType,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type RefreshTokenResultAjaxResponse struct {
 	TargetUrl           *string             `json:"targetUrl,omitempty"`
 	Success             bool                `json:"success"`
@@ -1387,6 +1503,7 @@ type RefreshTokenResultAjaxResponse struct {
 
 // --- Two Factor Auth Models ---
 
+// Verified against Full_api.json on April 17, 2026
 type SendTwoFactorAuthCodeModel struct {
 	UserId   string  `json:"userId"`
 	Provider *string `json:"provider,omitempty"`
@@ -1438,6 +1555,7 @@ type SwitchedAccountAuthenticateResultModel struct {
 // These models are kept for backward compatibility with existing code
 // Note: The new RequestProjectFormDto is defined above with proper schema matching
 
+// Verified against Full_api.json on April 17, 2026
 // Legacy version - use RequestProjectFormDtoPagedResultDtoAjaxResponse above for new code
 type RequestProjectFormDtoPagedResultDtoAjaxResponseLegacy struct {
 	Success bool                    `json:"success"`
@@ -1445,6 +1563,7 @@ type RequestProjectFormDtoPagedResultDtoAjaxResponseLegacy struct {
 	Error   string                  `json:"error"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 // Legacy ContinuousProjectDto - use the new ContinuousProjectDto above for new code
 type ContinuousProjectDtoLegacy struct {
 	ID          string `json:"id"`
@@ -1453,6 +1572,7 @@ type ContinuousProjectDtoLegacy struct {
 	Status      string `json:"status"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 // Legacy response - use the new ContinuousProjectDtoPagedResultDtoAjaxResponse above for new code
 type ContinuousProjectDtoPagedResultDtoAjaxResponseLegacy struct {
 	Success bool                         `json:"success"`
@@ -1460,6 +1580,7 @@ type ContinuousProjectDtoPagedResultDtoAjaxResponseLegacy struct {
 	Error   string                       `json:"error"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 // Legacy response - use the new ContinuousProjectDtoAjaxResponse above for new code
 type ContinuousProjectDtoAjaxResponseLegacy struct {
 	Success bool                       `json:"success"`
@@ -1467,6 +1588,7 @@ type ContinuousProjectDtoAjaxResponseLegacy struct {
 	Error   string                     `json:"error"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 // Legacy version - use RequestProjectFormDtoPagedResultDtoAjaxResponse above for new code
 type RequestProjectFormDtoAjaxResponseLegacy struct {
 	Success bool                    `json:"success"`
@@ -1474,6 +1596,7 @@ type RequestProjectFormDtoAjaxResponseLegacy struct {
 	Error   string                  `json:"error"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 // Legacy response models with different structure for backward compatibility
 type UserDtoPagedResultDtoAjaxResponseLegacy struct {
 	Success bool      `json:"success"`
@@ -1481,6 +1604,7 @@ type UserDtoPagedResultDtoAjaxResponseLegacy struct {
 	Error   string    `json:"error"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type AssetDtoPagedResultDtoAjaxResponseLegacy struct {
 	Success bool       `json:"success"`
 	Data    []AssetDto `json:"data"`
@@ -1489,6 +1613,7 @@ type AssetDtoPagedResultDtoAjaxResponseLegacy struct {
 
 // --- Pentester Models ---
 
+// Verified against Full_api.json on April 17, 2026
 type PentesterInfoModel struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
@@ -1652,12 +1777,14 @@ const (
 
 // --- Update Request Models ---
 
+// Verified against Full_api.json on April 17, 2026
 type UpdateProjectStatusRequestV2 struct {
 	Status string `json:"status"`
 }
 
 // --- Reduced Auth Model ---
 
+// Verified against Full_api.json on April 17, 2026
 type ReducedAuthenticateModel struct {
 	UserNameOrEmailAddress string `json:"userNameOrEmailAddress"`
 	Password               string `json:"password"`
@@ -1677,10 +1804,12 @@ type RunDto struct {
 	FindingIDList []string            `json:"findingIdList,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type RunDtoListResultDto struct {
 	Items []*RunDto `json:"items,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type RunDtoListResultDtoAjaxResponse struct {
 	TargetUrl           *string              `json:"targetUrl,omitempty"`
 	Success             bool                 `json:"success"`
@@ -1690,6 +1819,7 @@ type RunDtoListResultDtoAjaxResponse struct {
 	Result              *RunDtoListResultDto `json:"result,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 // Project Template Models - Updated to match Project.json schema on September 26, 2025
 type ProjectTemplateDtoPagedResultDto struct {
 	Items      []*ProjectTemplateDto `json:"items,omitempty"`
@@ -1715,6 +1845,7 @@ const (
 )
 
 // Task Group Template Models
+// Verified against Full_api.json on April 17, 2026
 type TaskGroupTemplateDto struct {
 	ID          string             `json:"id"`
 	Name        *string            `json:"name,omitempty"`
@@ -1722,6 +1853,7 @@ type TaskGroupTemplateDto struct {
 	TaskList    []*TaskTemplateDto `json:"taskList,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type TaskTemplateDto struct {
 	ID          string  `json:"id"`
 	Name        *string `json:"name,omitempty"`
@@ -1729,6 +1861,7 @@ type TaskTemplateDto struct {
 }
 
 // Checklist Template Models
+// Verified against Full_api.json on April 17, 2026
 type ChecklistTemplateDto struct {
 	ID            string                  `json:"id"`
 	Status        *ChecklistStatusEnum    `json:"status,omitempty"`
@@ -1738,11 +1871,13 @@ type ChecklistTemplateDto struct {
 	TaskGroupList []*TaskGroupTemplateDto `json:"taskGroupList,omitempty"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ChecklistTemplateDtoPagedResultDto struct {
 	Items      []*ChecklistTemplateDto `json:"items,omitempty"`
 	TotalCount int32                   `json:"totalCount"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ChecklistTemplateDtoPagedResultDtoAjaxResponse struct {
 	TargetUrl           *string                             `json:"targetUrl,omitempty"`
 	Success             bool                                `json:"success"`
@@ -1754,11 +1889,13 @@ type ChecklistTemplateDtoPagedResultDtoAjaxResponse struct {
 
 // Compliance Norm Template Models - using the verified version above
 
+// Verified against Full_api.json on April 17, 2026
 type ComplianceNormTemplateDtoPagedResultDto struct {
 	Items      []*ComplianceNormTemplateDto `json:"items,omitempty"`
 	TotalCount int32                        `json:"totalCount"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type ComplianceNormTemplateDtoPagedResultDtoAjaxResponse struct {
 	TargetUrl           *string                                  `json:"targetUrl,omitempty"`
 	Success             bool                                     `json:"success"`
@@ -1770,11 +1907,13 @@ type ComplianceNormTemplateDtoPagedResultDtoAjaxResponse struct {
 
 // Label Models (LabelDto is already defined above)
 
+// Verified against Full_api.json on April 17, 2026
 type LabelDtoPagedResultDto struct {
 	Items      []*LabelDto `json:"items,omitempty"`
 	TotalCount int32       `json:"totalCount"`
 }
 
+// Verified against Full_api.json on April 17, 2026
 type LabelDtoPagedResultDtoAjaxResponse struct {
 	TargetUrl           *string                 `json:"targetUrl,omitempty"`
 	Success             bool                    `json:"success"`
